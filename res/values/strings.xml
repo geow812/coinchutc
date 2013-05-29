@@ -2,7 +2,21 @@
 <resources>
 
     <string name="app_name">Coinch\'UTC</string>
+    <string name="accueil">Accueil</string>
+    <string name="creer_partie">CREER UNE PARTIE</string>
+    <string name="rejoindre_partie">REJOINDRE UNE PARTIE</string>
+    <string name="joueurs_connectes">JOUEURS CONNECTES</string>
+    <string name="coinch_utc">ESPACE COINCH\'UTC</string>
+    <string name="regles_du_jeu">REGLES DU JEU</string>
+    <string name="credits">CREDITS</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_creer_partie">Creer Une Partie</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_credits">Credits</string>
+    <string name="title_activity_rejoindre_partie">Rejoindre Une Partie</string>
+    <string name="title_activity_joueurs_connectes">Joueurs Connectes</string>
+    <string name="title_activity_coinch_utc">Espace Coinch\'UTC</string>
+    <string name="title_activity_regles_du_jeu">Regles du Jeu</string>
 
 </resources>
