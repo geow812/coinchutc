@@ -8,7 +8,7 @@ The purpose of this project is to put into practice the knowledge on interface d
 Apart from Android, we uses Jade to implement the multi-agent system.
 
 Project Members:
--Remi CLERMONT
--Bruno DEVAUX
--Simon LANCELOT
--Yiou WANG
+- Remi CLERMONT
+- Bruno DEVAUX
+- Simon LANCELOT
+- Yiou WANG
