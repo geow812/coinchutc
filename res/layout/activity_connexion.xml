@@ -21,12 +21,15 @@
     <EditText android:id="@+id/identifiant"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/identifiant" />
+        android:hint="@string/identifiant"
+        android:singleLine="true" />
     
     <EditText android:id="@+id/mdp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/mdp" />
+        android:hint="@string/mdp"
+        android:singleLine="true"
+        android:password="true" />
     
     <Button
         style="@style/BoutonGrand"
