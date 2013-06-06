@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -12,57 +11,69 @@
 
     <TextView
         style="@style/Titre"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
+        android:id="@+id/text_accueil"
         android:text="@string/accueil" />
-    
-    <Button
-        style="@style/BoutonGrand"
-        android:id="@+id/button_creer_partie"
-        android:layout_gravity="center_horizontal"
-        android:onClick="creerPartie"
-        android:text="@string/creer_partie" />
-    <Button
-        style="@style/BoutonGrand"
-        android:id="@+id/button_rejoindre_partie"
-        android:layout_gravity="center_horizontal"
-        android:onClick="rejoindrePartie"
-        android:text="@string/rejoindre_partie" />
-    
-    <Button
-        style="@style/BoutonGrand"
-        android:id="@+id/button_joueurs_connectes"
-        android:layout_gravity="center_horizontal"
-        android:onClick="joueursConnectes"
-        android:text="@string/joueurs_connectes" />
 
-    <Button
-        style="@style/BoutonGrand"
-        android:id="@+id/button_coinch_utc"
-        android:layout_gravity="center_horizontal"
-        android:onClick="coinchUtc"
-        android:text="@string/coinch_utc" />
-
-    <RelativeLayout
+    <LinearLayout
+        android:layout_below="@+id/text_accueil"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-
-    <Button
-        android:id="@+id/button_regles_du_jeu"
-        style="@style/BoutonPetit"
-        android:onClick="reglesDuJeu"
-        android:text="@string/regles_du_jeu"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true" />
-
-    <Button
-        android:id="@+id/button_credits"
-        style="@style/BoutonPetit"
-        android:onClick="credits"
-        android:text="@string/credits"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true" />
-
-	</RelativeLayout>
-
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    
+	    <Button
+	        style="@style/BoutonGrand"
+	        android:id="@+id/button_creer_partie"
+	        android:layout_gravity="center_horizontal"
+	        android:onClick="creerPartie"
+	        android:text="@string/creer_partie" />
+	    <Button
+	        style="@style/BoutonGrand"
+	        android:id="@+id/button_rejoindre_partie"
+	        android:layout_gravity="center_horizontal"
+	        android:onClick="rejoindrePartie"
+	        android:text="@string/rejoindre_partie" />
+	    
+	    <Button
+	        style="@style/BoutonGrand"
+	        android:id="@+id/button_joueurs_connectes"
+	        android:layout_gravity="center_horizontal"
+	        android:onClick="joueursConnectes"
+	        android:text="@string/joueurs_connectes" />
+	
+	    <Button
+	        style="@style/BoutonGrand"
+	        android:id="@+id/button_coinch_utc"
+	        android:layout_gravity="center_horizontal"
+	        android:onClick="coinchUtc"
+	        android:text="@string/coinch_utc" />
+	    
+	    <Button
+	        style="@style/BoutonGrand"
+	        android:id="@+id/button_deconnecter"
+	        android:layout_gravity="center_horizontal"
+	        android:onClick="deconnecter"
+	        android:text="@string/deconnecter" />
+	
+	    <RelativeLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content">
+	
+		    <Button
+		        android:id="@+id/button_regles_du_jeu"
+		        style="@style/BoutonPetit"
+		        android:onClick="reglesDuJeu"
+		        android:text="@string/regles_du_jeu"
+		        android:layout_alignParentLeft="true"
+		        android:layout_alignParentBottom="true" />
+		
+		    <Button
+		        android:id="@+id/button_credits"
+		        style="@style/BoutonPetit"
+		        android:onClick="credits"
+		        android:text="@string/credits"
+		        android:layout_alignParentRight="true"
+		        android:layout_alignParentBottom="true" />
+	
+		</RelativeLayout>
+	</LinearLayout>
+</RelativeLayout>

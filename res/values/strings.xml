@@ -7,8 +7,15 @@
     <string name="rejoindre_partie">REJOINDRE UNE PARTIE</string>
     <string name="joueurs_connectes">JOUEURS CONNECTES</string>
     <string name="coinch_utc">ESPACE COINCH\'UTC</string>
+    <string name="deconnecter">DECONNEXION</string>
     <string name="regles_du_jeu">REGLES DU JEU</string>
     <string name="credits">CREDITS</string>
+    <string name="connexion">Connexion</string>
+    <string name="identifiant">Identifiant</string>
+    <string name="mdp">Mot de passe</string>
+    <string name="connecter">SE CONNECTER</string>
+    <string name="pas_de_compte">Pas encore de compte?</string>
+    <string name="creer_compte">CREER UN COMPTE</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_creer_partie">Creer Une Partie</string>
@@ -18,5 +25,6 @@
     <string name="title_activity_joueurs_connectes">Joueurs Connectes</string>
     <string name="title_activity_coinch_utc">Espace Coinch\'UTC</string>
     <string name="title_activity_regles_du_jeu">Regles du Jeu</string>
+    <string name="title_activity_connexion">Connextion</string>
 
 </resources>

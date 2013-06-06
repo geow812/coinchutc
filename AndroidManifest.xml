@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.utc.coinchutc"
+    package="utc.coinchutc"
     android:versionCode="1"
     android:versionName="1.0" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="17" />
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.Holo" >
+        android:theme="@android:style/Theme.Holo"
+        android:name="CoinchutcApplication" >
+        
+        <service android:name="jade.android.MicroRuntimeService" />
+        
         <activity
-            android:name="com.utc.coinchutc.MainActivity"
+            android:name="utc.coinchutc.MainActivity"
+            android:noHistory="true"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,52 +29,56 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.utc.coinchutc.CreerPartieActivity"
+            android:name="utc.coinchutc.CreerPartieActivity"
             android:label="@string/title_activity_creer_partie"
-            android:parentActivityName="com.utc.coinchutc.MainActivity" >
+            android:parentActivityName="utc.coinchutc.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.utc.coinchutc.MainActivity" />
+                android:value="utc.coinchutc.MainActivity" />
         </activity>
         <activity
-            android:name="com.utc.coinchutc.CreditsActivity"
+            android:name="utc.coinchutc.CreditsActivity"
             android:label="@string/title_activity_credits"
-            android:parentActivityName="com.utc.coinchutc.MainActivity" >
+            android:parentActivityName="utc.coinchutc.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.utc.coinchutc.MainActivity" />
+                android:value="utc.coinchutc.MainActivity" />
         </activity>
         <activity
-            android:name="com.utc.coinchutc.RejoindrePartieActivity"
+            android:name="utc.coinchutc.RejoindrePartieActivity"
             android:label="@string/title_activity_rejoindre_partie"
-            android:parentActivityName="com.utc.coinchutc.MainActivity" >
+            android:parentActivityName="utc.coinchutc.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.utc.coinchutc.MainActivity" />
+                android:value="utc.coinchutc.MainActivity" />
         </activity>
         <activity
-            android:name="com.utc.coinchutc.JoueursConnectesActivity"
+            android:name="utc.coinchutc.JoueursConnectesActivity"
             android:label="@string/title_activity_joueurs_connectes"
-            android:parentActivityName="com.utc.coinchutc.MainActivity" >
+            android:parentActivityName="utc.coinchutc.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.utc.coinchutc.MainActivity" />
+                android:value="utc.coinchutc.MainActivity" />
         </activity>
         <activity
-            android:name="com.utc.coinchutc.CoinchUtcActivity"
+            android:name="utc.coinchutc.CoinchUtcActivity"
             android:label="@string/title_activity_coinch_utc"
-            android:parentActivityName="com.utc.coinchutc.MainActivity" >
+            android:parentActivityName="utc.coinchutc.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.utc.coinchutc.MainActivity" />
+                android:value="utc.coinchutc.MainActivity" />
         </activity>
         <activity
-            android:name="com.utc.coinchutc.ReglesDuJeuActivity"
+            android:name="utc.coinchutc.ReglesDuJeuActivity"
             android:label="@string/title_activity_regles_du_jeu"
-            android:parentActivityName="com.utc.coinchutc.MainActivity" >
+            android:parentActivityName="utc.coinchutc.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.utc.coinchutc.MainActivity" />
+                android:value="utc.coinchutc.MainActivity" />
+        </activity>
+        <activity
+            android:name="utc.coinchutc.ConnexionActivity"
+            android:label="@string/title_activity_connexion" >
         </activity>
     </application>
 
