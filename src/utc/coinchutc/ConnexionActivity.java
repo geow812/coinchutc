@@ -78,6 +78,7 @@ public class ConnexionActivity extends Activity {
 			    editor.putBoolean(MainActivity.CONNECTE, true);
 			    editor.commit();
 				Intent intent = new Intent(this, MainActivity.class);
+				intent.putExtra("identifiant", identifiant);
 				startActivity(intent);
 			} catch (Exception ex) {
 				logger.log(Level.SEVERE, "Unexpected exception creating chat agent!");

@@ -26,5 +26,7 @@
     <string name="title_activity_coinch_utc">Espace Coinch\'UTC</string>
     <string name="title_activity_regles_du_jeu">Regles du Jeu</string>
     <string name="title_activity_connexion">Connextion</string>
+    <string name="msg_interface_exc">Internal error!</string>
+    <string name="msg_controller_exc">Server error!</string>
 
 </resources>

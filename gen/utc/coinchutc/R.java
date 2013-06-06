@@ -74,6 +74,8 @@ public final class R {
         public static final int identifiant=0x7f05000a;
         public static final int joueurs_connectes=0x7f050004;
         public static final int mdp=0x7f05000b;
+        public static final int msg_controller_exc=0x7f05001a;
+        public static final int msg_interface_exc=0x7f050019;
         public static final int pas_de_compte=0x7f05000d;
         public static final int regles_du_jeu=0x7f050007;
         public static final int rejoindre_partie=0x7f050003;

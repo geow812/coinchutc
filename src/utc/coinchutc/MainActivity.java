@@ -1,12 +1,13 @@
 package utc.coinchutc;
 
 import jade.core.MicroRuntime;
+import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
-import utc.coinchutc.R;
 import utc.coinchutc.agent.CoincheClientInterface;
-
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,7 +19,7 @@ public class MainActivity extends Activity {
 	public static final String CONNECTE = "connecte";
 	private boolean connecte = false;
 	private String identifiant = "";
-	private CoincheClientInterface coincheClientInterface;
+	private CoincheClientInterface coincheClientInterface = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,15 +35,7 @@ public class MainActivity extends Activity {
 			Bundle extras = getIntent().getExtras();
 			if (extras != null) {
 				identifiant = extras.getString("identifiant");
-			}
-
-			try {
-				coincheClientInterface = MicroRuntime.getAgent(identifiant)
-						.getO2AInterface(CoincheClientInterface.class);
-			} catch (StaleProxyException e) {
-				//showAlertDialog(getString(R.string.msg_interface_exc), true);
-			} catch (ControllerException e) {
-				//showAlertDialog(getString(R.string.msg_controller_exc), true);
+				//showAlertDialog(identifiant, false);
 			}
 		}
 	}
@@ -90,12 +83,42 @@ public class MainActivity extends Activity {
 	}
 	
 	public void deconnecter(View view) {
+		if (MicroRuntime.isRunning()) {
+			try {
+				AgentController ac = MicroRuntime.getAgent(identifiant);
+//				showAlertDialog(ac.getName(), false);
+				coincheClientInterface = ac.getO2AInterface(CoincheClientInterface.class);
+				if (coincheClientInterface != null)
+					coincheClientInterface.deconnexion();
+			} catch (StaleProxyException e) {
+				showAlertDialog(getString(R.string.msg_interface_exc), true);
+			} catch (ControllerException e) {
+				showAlertDialog(getString(R.string.msg_controller_exc), true);
+			}
+		}
 		SharedPreferences settings = getSharedPreferences("jadeChatPrefsFile", 0);
 		SharedPreferences.Editor editor = settings.edit();
 	    editor.putBoolean(CONNECTE, false);
 	    editor.commit();
 	    Intent intent = new Intent(this, ConnexionActivity.class);
 		startActivity(intent);
+	}
+	
+	private void showAlertDialog(String message, final boolean fatal) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(
+				MainActivity.this);
+		builder.setMessage(message)
+				.setCancelable(false)
+				.setPositiveButton("Ok",
+						new DialogInterface.OnClickListener() {
+							public void onClick(
+									DialogInterface dialog, int id) {
+								dialog.cancel();
+								if(fatal) finish();
+							}
+						});
+		AlertDialog alert = builder.create();
+		alert.show();		
 	}
 
 }

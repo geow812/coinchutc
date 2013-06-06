@@ -25,7 +25,7 @@ import chat.ontology.Joined;
 import chat.ontology.Left;
 
 @SuppressWarnings("serial")
-public class CoincheClientAgent extends Agent {
+public class CoincheClientAgent extends Agent implements CoincheClientInterface {
 	private Logger logger = Logger.getJADELogger(this.getClass().getName());
 	private Set players = new SortedSetImpl();
 	private Context context;
@@ -34,6 +34,7 @@ public class CoincheClientAgent extends Agent {
 	private ACLMessage spokenMsg;
 	private static final String CHAT_ID = "__chat__";
 	private static final String CHAT_MANAGER_NAME = "manager";
+	private static final String DECONNEXION = "__deconnexion__";
 	
 	protected void setup() {
 		Object[] args = getArguments();
@@ -61,6 +62,8 @@ public class CoincheClientAgent extends Agent {
 		broadcast.setAction("jade.demo.chat.SHOW_CHAT");
 		logger.log(Level.INFO, "Sending broadcast " + broadcast.getAction());
 		context.sendBroadcast(broadcast);
+		
+		registerO2AInterface(CoincheClientInterface.class, this);
 	}
 	
 	private void notifyPlayerAction(String speaker, String sentence) {
@@ -158,6 +161,7 @@ public class CoincheClientAgent extends Agent {
 		}
 	} // END of inner class PartieListener
 
+	@Override
 	public String[] getPlayersNames() {
 		String[] pp = new String[players.size()];
 		Iterator it = players.iterator();
@@ -167,6 +171,20 @@ public class CoincheClientAgent extends Agent {
 			pp[i++] = id.getLocalName();
 		}
 		return pp;
+	}
+
+	@Override
+	public void handleSpoken(String s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deconnexion() {
+		ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+		message.addReceiver(new AID(CHAT_MANAGER_NAME, AID.ISLOCALNAME));
+		message.setContent(DECONNEXION);
+		this.send(message);
 	}
 
 }
