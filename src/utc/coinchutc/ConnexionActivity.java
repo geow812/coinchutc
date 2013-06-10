@@ -13,14 +13,15 @@ import jade.wrapper.ControllerException;
 
 import java.util.logging.Level;
 
-
-import utc.coinchutc.R;
 import utc.coinchutc.agent.CoincheClientAgent;
-
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -38,11 +39,20 @@ public class ConnexionActivity extends Activity {
 	
 	private String identifiant = "";
 	private String mdp = "";
+	private MyReceiver myReceiver = new MyReceiver();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_connexion);
+		
+		IntentFilter loginFilter = new IntentFilter();
+		loginFilter.addAction("coinchutc.LOGIN_SUCCESS");
+		registerReceiver(myReceiver, loginFilter);
+		
+		IntentFilter loginFailFilter = new IntentFilter();
+		loginFailFilter.addAction("coinchutc.LOGIN_FAIL");
+		registerReceiver(myReceiver, loginFailFilter);
 	}
 
 	@Override
@@ -50,6 +60,15 @@ public class ConnexionActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.connexion, menu);
 		return true;
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+		unregisterReceiver(myReceiver);
+
+		logger.log(Level.INFO, "Destroy activity!");
 	}
 	
 	private static boolean checkName(String identifiant, String mdp) {
@@ -77,9 +96,9 @@ public class ConnexionActivity extends Activity {
 				SharedPreferences.Editor editor = settings.edit();
 			    editor.putBoolean(MainActivity.CONNECTE, true);
 			    editor.commit();
-				Intent intent = new Intent(this, MainActivity.class);
-				intent.putExtra("identifiant", identifiant);
-				startActivity(intent);
+//				Intent intent = new Intent(this, MainActivity.class);
+//				intent.putExtra("identifiant", identifiant);
+//				startActivity(intent);
 			} catch (Exception ex) {
 				logger.log(Level.SEVERE, "Unexpected exception creating chat agent!");
 			}
@@ -166,7 +185,7 @@ public class ConnexionActivity extends Activity {
 	
 	private void startAgent(final String identifiant, final String mdp, final RuntimeCallback<AgentController> agentStartupCallback) {
 		microRuntimeServiceBinder.startAgent(identifiant, CoincheClientAgent.class.getName(),
-				new Object[] { getApplicationContext() },
+				new Object[] { getApplicationContext(), mdp },
 				new RuntimeCallback<Void>() {
 					@Override
 					public void onSuccess(Void thisIsNull) {
@@ -185,6 +204,40 @@ public class ConnexionActivity extends Activity {
 						agentStartupCallback.onFailure(throwable);
 					}
 				});
+	}
+	
+	public void login() {
+		Intent intent = new Intent(this, MainActivity.class);
+		intent.putExtra("identifiant", identifiant);
+		startActivity(intent);
+	}
+	
+	private class MyReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			logger.log(Level.INFO, "Received intent " + action);
+			if (action.equalsIgnoreCase("coinchutc.LOGIN_SUCCESS")) {
+				//ShowDialog("Login succeeded!");
+				login();
+			}
+			if (action.equalsIgnoreCase("coinchutc.LOGIN_FAIL")) {
+				ShowDialog("Login a ¨¦chou¨¦");
+			}
+		}
+	}
+	
+	public void ShowDialog(String message) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(ConnexionActivity.this);
+		builder.setMessage(message).setCancelable(false)
+				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				});
+		AlertDialog alert = builder.create();
+		alert.show();
 	}
 
 }
