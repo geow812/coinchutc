@@ -54,6 +54,7 @@ public class MainActivity extends Activity {
 	
 	public void rejoindrePartie(View view) {
 		Intent intent = new Intent(this, RejoindrePartieActivity.class);
+		intent.putExtra("identifiant", identifiant);
 		startActivity(intent);
 	}
 	

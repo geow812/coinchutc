@@ -28,5 +28,9 @@
     <string name="title_activity_connexion">Connextion</string>
     <string name="msg_interface_exc">Internal error!</string>
     <string name="msg_controller_exc">Server error!</string>
+    <string name="title_activity_partie">Partie</string>
+    <string name="jouer">JOUER</string>
+    <string name="annoncer">ANNONCER</string>
+    <string name="partie">PARTIE</string>
 
 </resources>

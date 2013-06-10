@@ -3,19 +3,26 @@ package utc.coinchutc;
 import utc.coinchutc.R;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class RejoindrePartieActivity extends Activity {
 
+	private String identifiant = "";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rejoindre_partie);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			identifiant = extras.getString("identifiant");
+		}
 	}
 
 	/**
@@ -51,4 +58,10 @@ public class RejoindrePartieActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	
+	public void partie(View view) {
+		Intent intent = new Intent(this, PartieActivity.class);
+		intent.putExtra("identifiant", identifiant);
+		startActivity(intent);
+	}
 }
