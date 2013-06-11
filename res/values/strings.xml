@@ -41,5 +41,17 @@
     <string name="Send">ENVOYER</string>
     <string name="ImageProfil">Profil</string>
     <string name="Credits">Le jeu a été developpé par 4 étudiants de l\'UTC : Bruno Devaux, Rémi Clermont, Simon Lancelot, Yiou Wang. Pour toutes informations, envoyer-nous un mail à remi.clermont@gmail.com</string>
-
+	<string name="regle">Règles du jeu</string>
+	<string name="principe">Le principe</string>
+	<string name="contrat">Le contrat</string>
+	<string name="coinche">La coinche</string>
+	<string name="deroulement">Deroulement d\'une partie</string>
+	<string name="points">Les points</string>
+	<string name="annonces">Les annonces</string>
+	<string name="regle_principe">La coinche se joue à quatre joueurs avec un jeu de 32 cartes. Les joueurs sont par équipe de deux et se font face. Le principe du jeu de la carte est celui de la belote. Le jeu diffère de la belote car en plus de choisir un atout on annonce le nombre de point que l\'on pense faire (et que l\'on doit faire).</string>
+	<string name="regle_contrat">Au début de la partie, chaque joueur, s\'il le désire, peut annoncer un contrat qu\'il doit réaliser avec son jeu. Son partenaire est là pour l\'aider.Le contrat se compose du nombre de points à effectuer et de la couleur de l\'atout.ex: 90 à pique. On doit annoncer 80 points minimum et ensuite augmenter d\'au moins 10 points par rapport au dernier contrat..Attention : Lorsqu\'on annonce un contrat, on doit en fait faire 2 points de plus. Par exemple un contrat de 100, signifie que l\'on doit faire 102 points.</string>
+	<string name="regle_coinche">Imaginons que l\'un de vos adversaires annonce 140 à pique, et que vous pensez pouvoir faire plus de 20 points avec votre jeu (donc vous pensez le mettre dedans), vous avez la possibilité de dire Je coinche. Ce qui veut dire que vous prétendez pouvoir l\'empêcher de faire son contrat. S\'il perd vous doublez vos gains, mais si vous perdez c\'est lui qui double ses gains.</string>
+	<string name="regle_deroulement">Le joueur qui est à droite du donneur commence par annoncer son contrat. Tout joueur peut annoncer un contrat ou passer la main, cela ne l\'empêchera pas s\'il a de nouveau la main d\'annoncer un contrat alors qu\'il a passé au tour précédent. On doit, pour pouvoir prendre un nouveau contrat, surenchérir par rapport au dernier contrat demandé. On ne peut pas demander la même couleur que ces adversaires. Les enchères s\'arrêtent dés que trois joueurs ont passé leurs tour à la suite. Alors la partie peut commencer ! C\'est le joueur à droite du donneur qui commence la partie en posant une carte.</string>
+	<string name="regle_points">Deux cas de figure se présentent: Si l\'équipe qui a demandé le contrat a réalisé celui-ci, alors elle gagne autant de points que le nombre spécifié dans le contrat auquel on ajoute le nombre de points effectivement réalisé (arrondi à la dizaine la plus proche). Si l\'équipe adverse n\'a remporté aucun pli, les preneurs marquent une prime supplémentaire de 90 points. L\'équipe adverse marque uniquement les points réalisés. Si par contre, le contrat n\'est pas réalisé, alors l\'équipe ne gagne aucun point et c\'est l\'équipe adverse qui cette fois remporte 160 points auxquels on ajoute les points du contrat demandé.</string>
+	<string name="regle_annonces">Les mêmes qu\'à la belote. Elles permettent de remporter son contrat.</string>
 </resources>
