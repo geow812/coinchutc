@@ -1,43 +1,23 @@
 package utc.coinchutc;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import utc.coinchutc.R;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.view.View;
 
 public class ReglesDuJeuActivity extends Activity {
 
-	private ListView mainListView ;  
-	private ArrayAdapter<String> listAdapter ;  
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_regles_du_jeu);
 		// Show the Up button in the action bar.
 		setupActionBar();
-	      
-	    // Find the ListView resource.   
-	    mainListView = (ListView) findViewById( R.id.rulesGameList );  
-	  
-	    // Create and populate a List of planet names.  
-	    String[] planets = new String[] { "Principe", "Le contrat", "La coinche", "Déroulement de la partie",  
-	                                      "Les points", "Les Annonces"};    
-	    ArrayList<String> planetList = new ArrayList<String>();  
-	    planetList.addAll( Arrays.asList(planets) );  
-	      
-	    // Create ArrayAdapter using the planet list.  
-	    listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, planetList);  
-	      
-	    // Set the ArrayAdapter as the ListView's adapter.  
-	    mainListView.setAdapter( listAdapter );
 	}
 
 	/**
@@ -55,7 +35,8 @@ public class ReglesDuJeuActivity extends Activity {
 		getMenuInflater().inflate(R.menu.regles_du_jeu, menu);
 		return true;
 	}
-
+	
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -72,5 +53,37 @@ public class ReglesDuJeuActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	public void reglePrincipe(View view) {
+		Intent intent = new Intent(this, ReglePrincipeActivity.class);
+		startActivity(intent);
+	}
+	
+	public void regleContrat(View view) {
+		Intent intent = new Intent(this, RegleContratActivity.class);
+		startActivity(intent);
+	}
+	
+	public void regleCoinche(View view) {
+		Intent intent = new Intent(this, RegleCoincheActivity.class);
+		startActivity(intent);
+	}
+	
+	public void regleDeroulement(View view) {
+		Intent intent = new Intent(this, RegleDeroulementActivity.class);
+		startActivity(intent);
+	}
+	
+	public void reglePoints(View view) {
+		Intent intent = new Intent(this, ReglePointsActivity.class);
+		startActivity(intent);
+	}
+	
+	public void regleAnnonces(View view) {
+		Intent intent = new Intent(this, RegleAnnoncesActivity.class);
+		startActivity(intent);
+	}
+	
+	
 
 }

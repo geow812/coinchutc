@@ -98,6 +98,54 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="utc.coinchutc.ConnexionActivity" />
         </activity>
+        <activity
+            android:name="utc.coinchutc.ReglePrincipeActivity"
+            android:label="@string/principe"
+            android:parentActivityName="utc.coinchutc.ReglesDuJeuActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="utc.coinchutc.ReglesDuJeuActivity" />
+        </activity>
+         <activity
+            android:name="utc.coinchutc.RegleContratActivity"
+            android:label="@string/contrat"
+            android:parentActivityName="utc.coinchutc.ReglesDuJeuActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="utc.coinchutc.ReglesDuJeuActivity" />
+        </activity>
+         <activity
+            android:name="utc.coinchutc.RegleCoincheActivity"
+            android:label="@string/coinche"
+            android:parentActivityName="utc.coinchutc.RegleCoincheActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="utc.coinchutc.ReglesDuJeuActivity" />
+        </activity>
+         <activity
+            android:name="utc.coinchutc.RegleDeroulementActivity"
+            android:label="@string/deroulement"
+            android:parentActivityName="utc.coinchutc.RegleDeroulementActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="utc.coinchutc.ReglesDuJeuActivity" />
+        </activity>
+         <activity
+            android:name="utc.coinchutc.ReglePointsActivity"
+            android:label="@string/points"
+            android:parentActivityName="utc.coinchutc.ReglePointsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="utc.coinchutc.ReglesDuJeuActivity" />
+        </activity>
+         <activity
+            android:name="utc.coinchutc.RegleAnnoncesActivity"
+            android:label="@string/annonces"
+            android:parentActivityName="utc.coinchutc.RegleAnnoncesActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="utc.coinchutc.ReglesDuJeuActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -73,6 +73,7 @@ public class MainActivity extends Activity {
 		startActivity(intent);
 	}
 	
+	
 	public void credits(View view) {
 		Intent intent = new Intent(this, CreditsActivity.class);
 		startActivity(intent);

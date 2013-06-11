@@ -39,7 +39,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int remi=0x7f020001;
     }
     public static final class id {
-        public static final int action_settings=0x7f090021;
+        public static final int action_settings=0x7f090027;
         public static final int buttonAnnoncer=0x7f090010;
         public static final int buttonJouer=0x7f090012;
         public static final int button_coinch_utc=0x7f09000a;
@@ -50,29 +50,35 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int button_joueurs_connectes=0x7f090009;
         public static final int button_regles_du_jeu=0x7f09000c;
         public static final int button_rejoindre_partie=0x7f090008;
-        public static final int chatTextView=0x7f09001d;
-        public static final int chatViewLayout=0x7f09001c;
+        public static final int chatTextView=0x7f090023;
+        public static final int chatViewLayout=0x7f090022;
+        public static final int deroulement_partie=0x7f090017;
         public static final int idField=0x7f09000d;
         public static final int identifiant=0x7f090002;
+        public static final int la_coinche=0x7f090016;
         public static final int layout_conn=0x7f090001;
+        public static final int le_contrat=0x7f090015;
+        public static final int les_annonces=0x7f090019;
+        public static final int les_points=0x7f090018;
         public static final int mdp=0x7f090003;
-        public static final int messageToSend=0x7f09001f;
-        public static final int profilImage1=0x7f090015;
-        public static final int profilImage2=0x7f090017;
-        public static final int profilImage3=0x7f090018;
-        public static final int profilImage4=0x7f09001a;
-        public static final int profilName1=0x7f090014;
-        public static final int profilName2=0x7f090016;
-        public static final int profilName3=0x7f090019;
-        public static final int profilName4=0x7f09001b;
-        public static final int rowTextView=0x7f090020;
-        public static final int rulesGameList=0x7f090013;
-        public static final int sendMessageButton=0x7f09001e;
+        public static final int messageToSend=0x7f090025;
+        public static final int principe=0x7f090014;
+        public static final int profilImage1=0x7f09001b;
+        public static final int profilImage2=0x7f09001d;
+        public static final int profilImage3=0x7f09001e;
+        public static final int profilImage4=0x7f090020;
+        public static final int profilName1=0x7f09001a;
+        public static final int profilName2=0x7f09001c;
+        public static final int profilName3=0x7f09001f;
+        public static final int profilName4=0x7f090021;
+        public static final int rowTextView=0x7f090026;
+        public static final int sendMessageButton=0x7f090024;
         public static final int spinnerAnnonce=0x7f09000e;
         public static final int spinnerCouleur=0x7f09000f;
         public static final int spinnerPoints=0x7f090011;
         public static final int text_accueil=0x7f090006;
         public static final int text_connexion=0x7f090000;
+        public static final int text_regle=0x7f090013;
     }
     public static final class layout {
         public static final int activity_coinch_utc=0x7f030000;
@@ -82,9 +88,15 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int activity_joueurs_connectes=0x7f030004;
         public static final int activity_main=0x7f030005;
         public static final int activity_partie=0x7f030006;
-        public static final int activity_regles_du_jeu=0x7f030007;
-        public static final int activity_rejoindre_partie=0x7f030008;
-        public static final int simplerow=0x7f030009;
+        public static final int activity_regle_annonces=0x7f030007;
+        public static final int activity_regle_coinche=0x7f030008;
+        public static final int activity_regle_contrat=0x7f030009;
+        public static final int activity_regle_deroulement=0x7f03000a;
+        public static final int activity_regle_points=0x7f03000b;
+        public static final int activity_regle_principe=0x7f03000c;
+        public static final int activity_regles_du_jeu=0x7f03000d;
+        public static final int activity_rejoindre_partie=0x7f03000e;
+        public static final int simplerow=0x7f03000f;
     }
     public static final class menu {
         public static final int coinch_utc=0x7f080000;
@@ -105,14 +117,18 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int accueil=0x7f060001;
         public static final int action_settings=0x7f06000f;
         public static final int annoncer=0x7f06001d;
+        public static final int annonces=0x7f06002a;
         public static final int app_name=0x7f060000;
         public static final int coinch_utc=0x7f060005;
+        public static final int coinche=0x7f060027;
         public static final int connecter=0x7f06000c;
         public static final int connexion=0x7f060009;
+        public static final int contrat=0x7f060026;
         public static final int credits=0x7f060008;
         public static final int creer_compte=0x7f06000e;
         public static final int creer_partie=0x7f060002;
         public static final int deconnecter=0x7f060006;
+        public static final int deroulement=0x7f060028;
         public static final int hello_world=0x7f060012;
         public static final int identifiant=0x7f06000a;
         public static final int jouer=0x7f06001c;
@@ -123,6 +139,15 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int msg_interface_exc=0x7f060019;
         public static final int partie=0x7f06001e;
         public static final int pas_de_compte=0x7f06000d;
+        public static final int points=0x7f060029;
+        public static final int principe=0x7f060025;
+        public static final int regle=0x7f060024;
+        public static final int regle_annonces=0x7f060030;
+        public static final int regle_coinche=0x7f06002d;
+        public static final int regle_contrat=0x7f06002c;
+        public static final int regle_deroulement=0x7f06002e;
+        public static final int regle_points=0x7f06002f;
+        public static final int regle_principe=0x7f06002b;
         public static final int regles_du_jeu=0x7f060007;
         public static final int rejoindre_partie=0x7f060003;
         public static final int title_activity_coinch_utc=0x7f060016;
