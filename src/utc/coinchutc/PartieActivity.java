@@ -13,16 +13,19 @@ import jade.wrapper.ControllerException;
 
 import java.util.logging.Level;
 
-import utc.coinchutc.agent.CoincheClientAgent;
+import utc.coinchutc.agent.ConnexionAgent;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NavUtils;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,18 +33,20 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class PartieActivity extends Activity {
-	
+
 	private Logger logger = Logger.getJADELogger(this.getClass().getName());
-	private static final String[] annonces={"0","80","90","100","110","120","250"}; 
-	private static final String[] couleurs={"Pique","Tr��fle","Carreau","Coeur","Tout-Atout","Sans-Atout"}; 
+	private static final String[] annonces={"80","90","100","110","120","130","140","150","160","Capot"}; 
+	private static final String[] couleurs={"Pique","Trefle","Carreau","Coeur","Tout-Atout","Sans-Atout"}; 
 	private static final String[] cartes={}; 
 	private Spinner spinnerAnnonce, spinnerCouleur; 
-	private TextView idField;
+	private TextView joueur1, joueur2, joueur3, joueur4;
 	private String identifiant = "";
 	private MicroRuntimeServiceBinder microRuntimeServiceBinder;
 	private ServiceConnection serviceConnection;
+	private AlertDialog dialogAnnonce;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,22 +54,73 @@ public class PartieActivity extends Activity {
 		setContentView(R.layout.activity_partie);
 		// Show the Up button in the action bar.
 		setupActionBar();
+
+
+		//Boite de dialogue pour annoncer :
+		// ------ code récupéré de : http://www.tutomobile.fr/personnaliser-un-alertdialog-tutoriel-android-n%C2%B020/04/11/2010/
+		LayoutInflater factory = LayoutInflater.from(this);
+		final View annonceDialogView = factory.inflate(R.layout.annonce, null);
+
+		AlertDialog.Builder adb = new AlertDialog.Builder(PartieActivity.this);
+
+		//On affecte la vue personnalisé que l'on a crée à notre AlertDialog
+		adb.setView(annonceDialogView);
+
+		//On donne un titre à l'AlertDialog
+		adb.setTitle("A vous d'annoncer :");
+
+		//On peut modifier l'icone si besoin (TODO)
+		//adb.setIcon(android.R.drawable.ic_dialog_alert);
+
+		//On affecte un bouton "Annoncer" à notre AlertDialog et on lui affecte un évènement
+		adb.setPositiveButton("Annoncer", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				//TODO : c'est ici qu'on va gérer l'envoi de l'annonce à notre serveur en Jade
+				//Lorsque l'on cliquera sur le bouton "OK", on récupère l'EditText correspondant à notre vue personnalisée (cad à alertDialogView)
+				//EditText et = (EditText)alertDialogView.findViewById(R.id.EditText1);
+
+				//On affiche dans un Toast le texte contenu dans l'EditText de notre AlertDialog
+				//Toast.makeText(Tutoriel18_Android.this, et.getText(), Toast.LENGTH_SHORT).show();
+			} });
+		//On crée un bouton "Passer" à notre AlertDialog et on lui affecte un évènement
+		adb.setNegativeButton("Passer", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				//TODO : c'est ici qu'on va gérer signaler que le joueur passe à notre serveur en Jade
+
+			} });
+
 		
-		spinnerAnnonce=(Spinner)findViewById(R.id.spinnerAnnonce);
-		spinnerCouleur=(Spinner)findViewById(R.id.spinnerCouleur);
-		ArrayAdapter<String> adapterAnnonce = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, annonces),
-				adapterCouleur = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, couleurs);  
+		
+		//Création des menus déroulants (couleur et points a annocner)
+		spinnerAnnonce=(Spinner)annonceDialogView.findViewById(R.id.spinnerCouleur);
+		ArrayAdapter<String> adapterAnnonce = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, annonces);  
 		adapterAnnonce.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerAnnonce.setAdapter(adapterAnnonce);
+		
+		spinnerCouleur=(Spinner)annonceDialogView.findViewById(R.id.spinnerAnnonce);
+		ArrayAdapter<String>adapterCouleur = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, couleurs);
 		adapterCouleur.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerCouleur.setAdapter(adapterCouleur); 
+
+
+		//On créer notre boite de dialogue qu'on affecte à notre attribut privé :
+		dialogAnnonce = adb.create();
+		
+		//On l'affiche :
+		dialogAnnonce.show();
+
+
+		//Affichage des noms des joueurs
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
+			//TODO : remplacer les string des textView "nom de joueurs" par leur login via JADE
+
 			identifiant = extras.getString("identifiant");
-			idField = (TextView)findViewById(R.id.idField);
-			idField.setText(identifiant);
+			joueur1 = (TextView)findViewById(R.id.joueur1);
+			joueur1.setText(identifiant);
 		}
-		
+
+
 	}
 
 	/**
@@ -75,6 +131,9 @@ public class PartieActivity extends Activity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 	}
+
+
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -99,7 +158,7 @@ public class PartieActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	public void lancePartie(View view) {
 		try {
 			SharedPreferences settings = getSharedPreferences("jadeChatPrefsFile", 0);
@@ -107,16 +166,16 @@ public class PartieActivity extends Activity {
 			String port = settings.getString("defaultPort", "");
 			startChat(identifiant, host, port, agentStartupCallback);
 			SharedPreferences.Editor editor = settings.edit();
-		    editor.putBoolean(MainActivity.CONNECTE, true);
-		    editor.commit();
-//				Intent intent = new Intent(this, MainActivity.class);
-//				intent.putExtra("identifiant", identifiant);
-//				startActivity(intent);
+			editor.putBoolean(MainActivity.CONNECTE, true);
+			editor.commit();
+			//				Intent intent = new Intent(this, MainActivity.class);
+			//				intent.putExtra("identifiant", identifiant);
+			//				startActivity(intent);
 		} catch (Exception ex) {
 			logger.log(Level.SEVERE, "Unexpected exception creating chat agent!");
 		}
 	}
-	
+
 	private RuntimeCallback<AgentController> agentStartupCallback = new RuntimeCallback<AgentController>() {
 		@Override
 		public void onSuccess(AgentController agent) {
@@ -127,7 +186,7 @@ public class PartieActivity extends Activity {
 			logger.log(Level.INFO, "L'identifiant ou le mot de passe n'est pas valide");
 		}
 	};
-	
+
 	public void startChat(final String identifiant, final String host,
 			final String port,
 			final RuntimeCallback<AgentController> agentStartupCallback) {
@@ -170,49 +229,49 @@ public class PartieActivity extends Activity {
 			startContainer(identifiant, profile, agentStartupCallback);
 		}
 	}
-	
+
 	private void startContainer(final String identifiant, Properties profile,
 			final RuntimeCallback<AgentController> agentStartupCallback) {
 		if (!MicroRuntime.isRunning()) {
 			microRuntimeServiceBinder.startAgentContainer(profile,
 					new RuntimeCallback<Void>() {
-						@Override
-						public void onSuccess(Void thisIsNull) {
-							logger.log(Level.INFO, "Successfully start of the container...");
-							startAgent(identifiant, agentStartupCallback);
-						}
+				@Override
+				public void onSuccess(Void thisIsNull) {
+					logger.log(Level.INFO, "Successfully start of the container...");
+					startAgent(identifiant, agentStartupCallback);
+				}
 
-						@Override
-						public void onFailure(Throwable throwable) {
-							logger.log(Level.SEVERE, "Failed to start the container...");
-						}
-					});
+				@Override
+				public void onFailure(Throwable throwable) {
+					logger.log(Level.SEVERE, "Failed to start the container...");
+				}
+			});
 		} else {
 			startAgent(identifiant, agentStartupCallback);
 		}
 	}
-	
+
 	private void startAgent(final String identifiant, final RuntimeCallback<AgentController> agentStartupCallback) {
-		microRuntimeServiceBinder.startAgent(identifiant, CoincheClientAgent.class.getName(),
+		microRuntimeServiceBinder.startAgent(identifiant, ConnexionAgent.class.getName(),
 				new Object[] { getApplicationContext()},//TODO: passer les arguments ici
 				new RuntimeCallback<Void>() {
-					@Override
-					public void onSuccess(Void thisIsNull) {
-						logger.log(Level.INFO, "Successfully start of the " + CoincheClientAgent.class.getName() + "...");
-						try {
-							agentStartupCallback.onSuccess(MicroRuntime.getAgent(identifiant));
-						} catch (ControllerException e) {
-							// Should never happen
-							agentStartupCallback.onFailure(e);
-						}
-					}
+			@Override
+			public void onSuccess(Void thisIsNull) {
+						logger.log(Level.INFO, "Successfully start of the " + ConnexionAgent.class.getName() + "...");
+				try {
+					agentStartupCallback.onSuccess(MicroRuntime.getAgent(identifiant));
+				} catch (ControllerException e) {
+					// Should never happen
+					agentStartupCallback.onFailure(e);
+				}
+			}
 
-					@Override
-					public void onFailure(Throwable throwable) {
-						logger.log(Level.SEVERE, "Failed to start the " + CoincheClientAgent.class.getName() + "...");
-						agentStartupCallback.onFailure(throwable);
-					}
-				});
+			@Override
+			public void onFailure(Throwable throwable) {
+						logger.log(Level.SEVERE, "Failed to start the " + ConnexionAgent.class.getName() + "...");
+				agentStartupCallback.onFailure(throwable);
+			}
+		});
 	}
 
 
