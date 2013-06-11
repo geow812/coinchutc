@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/mdp"
         android:singleLine="true"
-        android:password="true" />
+        android:inputType="textPassword" />
     
     <Button
         style="@style/BoutonGrand"

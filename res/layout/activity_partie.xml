@@ -1,0 +1,61 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".PartieActivity" >
+
+    <TextView
+        android:id="@+id/idField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="21dp"
+        android:text="@string/hello_world" />
+
+    <Spinner
+        android:id="@+id/spinnerAnnonce"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/spinnerCouleur"
+        android:layout_below="@+id/idField"
+        android:layout_marginTop="14dp" />
+
+    <Spinner
+        android:id="@+id/spinnerCouleur"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spinnerAnnonce"
+        android:layout_marginTop="14dp" />
+
+    <Button
+        android:id="@+id/buttonAnnoncer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/spinnerPoints"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="24dp"
+        android:text="@string/annoncer"
+        android:onClick="lancePartie" />
+
+    <Spinner
+        android:id="@+id/spinnerPoints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/spinnerCouleur"
+        android:layout_below="@+id/spinnerCouleur"
+        android:layout_marginTop="17dp" />
+
+    <Button
+        android:id="@+id/buttonJouer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/buttonAnnoncer"
+        android:layout_alignRight="@+id/spinnerPoints"
+        android:text="@string/jouer" />
+
+</RelativeLayout>

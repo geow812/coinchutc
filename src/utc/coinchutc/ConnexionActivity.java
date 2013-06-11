@@ -26,6 +26,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
@@ -40,6 +41,9 @@ public class ConnexionActivity extends Activity {
 	private String identifiant = "";
 	private String mdp = "";
 	private MyReceiver myReceiver = new MyReceiver();
+	
+	public static final String CREER_COMPTE = "__creer_compte__";
+	public static final String CONNECTER = "__connecter__";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +73,13 @@ public class ConnexionActivity extends Activity {
 		unregisterReceiver(myReceiver);
 
 		logger.log(Level.INFO, "Destroy activity!");
+		
+		if (serviceConnection != null) {
+	        Log.d("Destroy", "Focus onDestroy() attempted to unbind service");
+	        unbindService(serviceConnection);
+	        serviceConnection = null;
+	    }
+	    Log.d("Destroy", "Focus onDestroy()");
 	}
 	
 	private static boolean checkName(String identifiant, String mdp) {
@@ -79,6 +90,16 @@ public class ConnexionActivity extends Activity {
 		return true;
 	}
 
+	public void configJade(String id, String mdp, String option) {
+		SharedPreferences settings = getSharedPreferences("jadeChatPrefsFile", 0);
+		String host = settings.getString("defaultHost", "");
+		String port = settings.getString("defaultPort", "");
+		startChat(id, mdp, option, host, port, agentStartupCallback);
+		SharedPreferences.Editor editor = settings.edit();
+	    editor.putBoolean(MainActivity.CONNECTE, true);
+	    editor.commit();
+	}
+	
 	public void connecter(View view) {
 		// Get the user name and the password
 		EditText nameField = (EditText) findViewById(R.id.identifiant);
@@ -89,22 +110,33 @@ public class ConnexionActivity extends Activity {
 		
 		if (checkName(identifiant, mdp)) {
 			try {
-				SharedPreferences settings = getSharedPreferences("jadeChatPrefsFile", 0);
-				String host = settings.getString("defaultHost", "");
-				String port = settings.getString("defaultPort", "");
-				startChat(identifiant, mdp, host, port, agentStartupCallback);
-				SharedPreferences.Editor editor = settings.edit();
-			    editor.putBoolean(MainActivity.CONNECTE, true);
-			    editor.commit();
-//				Intent intent = new Intent(this, MainActivity.class);
-//				intent.putExtra("identifiant", identifiant);
-//				startActivity(intent);
+				configJade(identifiant, mdp, CONNECTER);
 			} catch (Exception ex) {
-				logger.log(Level.SEVERE, "Unexpected exception creating chat agent!");
+				logger.log(Level.SEVERE, "Unexpected exception connecting to the server!");
 			}
 		}
 		else {
-			logger.log(Level.INFO, "Invalid nickname!");
+			logger.log(Level.INFO, "Invalid login or password!");
+		}
+	}
+	
+	public void creerCompte(View view) {
+		// Get the user name and the password
+		EditText nameField = (EditText) findViewById(R.id.identifiant);
+		identifiant = nameField.getText().toString();
+		
+		EditText mdpField = (EditText) findViewById(R.id.mdp);
+		mdp = mdpField.getText().toString();
+		
+		if (checkName(identifiant, mdp)) {
+			try {
+				configJade(identifiant, mdp, CREER_COMPTE);
+			} catch (Exception ex) {
+				logger.log(Level.SEVERE, "Unexpected exception creating the account!");
+			}
+		}
+		else {
+			logger.log(Level.INFO, "Invalid login or password!");
 		}
 	}
 	
@@ -119,7 +151,7 @@ public class ConnexionActivity extends Activity {
 		}
 	};
 	
-	public void startChat(final String identifiant, final String mdp, final String host,
+	public void startChat(final String identifiant, final String mdp, final String option, final String host,
 			final String port,
 			final RuntimeCallback<AgentController> agentStartupCallback) {
 
@@ -144,7 +176,7 @@ public class ConnexionActivity extends Activity {
 						IBinder service) {
 					microRuntimeServiceBinder = (MicroRuntimeServiceBinder) service;
 					logger.log(Level.INFO, "Gateway successfully bound to MicroRuntimeService");
-					startContainer(identifiant, mdp, profile, agentStartupCallback);
+					startContainer(identifiant, mdp, option, profile, agentStartupCallback);
 				};
 
 				public void onServiceDisconnected(ComponentName className) {
@@ -158,11 +190,11 @@ public class ConnexionActivity extends Activity {
 					Context.BIND_AUTO_CREATE);
 		} else {
 			logger.log(Level.INFO, "MicroRumtimeGateway already binded to service");
-			startContainer(identifiant, mdp, profile, agentStartupCallback);
+			startContainer(identifiant, mdp, option, profile, agentStartupCallback);
 		}
 	}
 	
-	private void startContainer(final String identifiant, final String mdp, Properties profile,
+	private void startContainer(final String identifiant, final String mdp, final String option, Properties profile,
 			final RuntimeCallback<AgentController> agentStartupCallback) {
 		if (!MicroRuntime.isRunning()) {
 			microRuntimeServiceBinder.startAgentContainer(profile,
@@ -170,7 +202,7 @@ public class ConnexionActivity extends Activity {
 						@Override
 						public void onSuccess(Void thisIsNull) {
 							logger.log(Level.INFO, "Successfully start of the container...");
-							startAgent(identifiant, mdp, agentStartupCallback);
+							startAgent(identifiant, mdp, option, agentStartupCallback);
 						}
 
 						@Override
@@ -179,13 +211,13 @@ public class ConnexionActivity extends Activity {
 						}
 					});
 		} else {
-			startAgent(identifiant, mdp, agentStartupCallback);
+			startAgent(identifiant, mdp, option, agentStartupCallback);
 		}
 	}
 	
-	private void startAgent(final String identifiant, final String mdp, final RuntimeCallback<AgentController> agentStartupCallback) {
+	private void startAgent(final String identifiant, final String mdp, final String option, final RuntimeCallback<AgentController> agentStartupCallback) {
 		microRuntimeServiceBinder.startAgent(identifiant, CoincheClientAgent.class.getName(),
-				new Object[] { getApplicationContext(), mdp },
+				new Object[] { getApplicationContext(), mdp, option },
 				new RuntimeCallback<Void>() {
 					@Override
 					public void onSuccess(Void thisIsNull) {

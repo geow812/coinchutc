@@ -18,8 +18,11 @@ import jade.util.leap.SortedSetImpl;
 import java.util.List;
 import java.util.logging.Level;
 
+import utc.coinchutc.ConnexionActivity;
+
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import chat.ontology.ChatOntology;
 import chat.ontology.Joined;
 import chat.ontology.Left;
@@ -30,6 +33,7 @@ public class CoincheClientAgent extends Agent implements CoincheClientInterface 
 	private Set players = new SortedSetImpl();
 	private Context context;
 	private String mdp;
+	private String option;
 	private Codec codec = new SLCodec();
 	private Ontology onto = ChatOntology.getInstance();
 	private ACLMessage spokenMsg;
@@ -46,7 +50,13 @@ public class CoincheClientAgent extends Agent implements CoincheClientInterface 
 				context = (Context) args[0];
 			}
 			if (args.length > 1) {
+//				System.out.println("Test");
 				mdp = (String) args[1];
+			}
+			if (args.length > 2) {
+				
+				option = (String) args[2];
+				System.out.println(option);
 			}
 		}
 
@@ -116,13 +126,22 @@ public class CoincheClientAgent extends Agent implements CoincheClientInterface 
 		}
 
 		public void onStart() {
-			// Subscribe as a chat participant to the ChatManager agent
-			ACLMessage subscription = new ACLMessage(ACLMessage.SUBSCRIBE);
+			ACLMessage demande = null;
+			if (option == ConnexionActivity.CONNECTER) { 
+				// To login with existing account
+				demande = new ACLMessage(ACLMessage.SUBSCRIBE);
+			}
+			else {
+				// To create an account
+				demande = new ACLMessage(ACLMessage.REQUEST);
+			}
 			String convId = "C-" + myAgent.getLocalName();
-			subscription.setConversationId(convId);
-			subscription.addReceiver(new AID(CHAT_MANAGER_NAME, AID.ISLOCALNAME));
-			subscription.setContent(mdp);
-			myAgent.send(subscription);
+			demande.setConversationId(convId);
+			demande.addReceiver(new AID(CHAT_MANAGER_NAME, AID.ISLOCALNAME));
+			demande.setContent(mdp);
+			Log.d("ClientAant", "Send message to " + CHAT_MANAGER_NAME + ": " + mdp);
+			myAgent.send(demande);
+			
 			// Initialize the template used to receive notifications
 			// from the ChatManagerAgent
 			template = MessageTemplate.MatchConversationId(convId);

@@ -32,5 +32,6 @@
     <string name="jouer">JOUER</string>
     <string name="annoncer">ANNONCER</string>
     <string name="partie">PARTIE</string>
+    <string name="title_activity_creer_compte">Creer un compte</string>
 
 </resources>
