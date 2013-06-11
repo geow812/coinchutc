@@ -9,53 +9,44 @@
     tools:context=".PartieActivity" >
 
     <TextView
-        android:id="@+id/idField"
+        android:id="@+id/joueur1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/joueur1" />
+
+    <TextView
+        android:id="@+id/joueur2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:text="@string/joueur2" />
+
+    <TextView
+        android:id="@+id/joueur3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="21dp"
-        android:text="@string/hello_world" />
+        android:text="@string/joueur3" />
 
-    <Spinner
-        android:id="@+id/spinnerAnnonce"
+    <TextView
+        android:id="@+id/joueur4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/spinnerCouleur"
-        android:layout_below="@+id/idField"
-        android:layout_marginTop="14dp" />
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:text="@string/joueur4" />
 
-    <Spinner
-        android:id="@+id/spinnerCouleur"
+    <LinearLayout
+        android:id="@+id/cartesjoueur1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/spinnerAnnonce"
-        android:layout_marginTop="14dp" />
-
-    <Button
-        android:id="@+id/buttonAnnoncer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/spinnerPoints"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="24dp"
-        android:text="@string/annoncer"
-        android:onClick="lancePartie" />
-
-    <Spinner
-        android:id="@+id/spinnerPoints"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/spinnerCouleur"
-        android:layout_below="@+id/spinnerCouleur"
-        android:layout_marginTop="17dp" />
-
-    <Button
-        android:id="@+id/buttonJouer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/buttonAnnoncer"
-        android:layout_alignRight="@+id/spinnerPoints"
-        android:text="@string/jouer" />
+        android:orientation="vertical"
+        >
+        
+    </LinearLayout>
 
 </RelativeLayout>
