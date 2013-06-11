@@ -23,13 +23,13 @@ public class RejoindrePartieActivity extends Activity {
 		setContentView(R.layout.activity_rejoindre_partie);
 		layout = (RelativeLayout) RelativeLayout.inflate(this, R.layout.activity_rejoindre_partie, null);
 	    text = (TextView) layout.findViewById(R.id.profilName1);
-	    text.setText("Rémi");
+	    text.setText("R¨¦mi");
 	    text = (TextView) layout.findViewById(R.id.profilName2);
-	    text.setText("Rémi");
+	    text.setText("R¨¦mi");
 	    text = (TextView) layout.findViewById(R.id.profilName3);
-	    text.setText("Rémi");
+	    text.setText("R¨¦mi");
 	    text = (TextView) layout.findViewById(R.id.profilName4);
-	    text.setText("Rémi");
+	    text.setText("R¨¦mi");
 	    setContentView(layout);
 		// Show the Up button in the action bar.
 		setupActionBar();

@@ -32,6 +32,10 @@
     <string name="jouer">JOUER</string>
     <string name="annoncer">ANNONCER</string>
     <string name="partie">PARTIE</string>
+    <string name="joueur1">JOUEUR 1</string>
+    <string name="joueur2">JOUEUR 2</string>
+    <string name="joueur3">JOUEUR 3</string>
+    <string name="joueur4">JOUEUR 4</string>
     <string name="title_activity_creer_compte">Creer un compte</string>
     <string name="messageToSendHint">Ecrivez votre message...</string>
     <string name="Send">ENVOYER</string>
