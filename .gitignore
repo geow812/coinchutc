@@ -1,0 +1,9 @@
+*.dex
+*.class
+.classpath
+*.prefs
+*.jar
+*.cache
+*.apk
+*.ap_
+gen/utc/coinchutc/R.java
