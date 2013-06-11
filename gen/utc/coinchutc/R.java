@@ -19,7 +19,10 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int buttonBarStyle=0x7f010000;
     }
     public static final class color {
+        public static final int black=0x7f040002;
         public static final int black_overlay=0x7f040000;
+        public static final int green=0x7f040001;
+        public static final int greenLight=0x7f040003;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -33,9 +36,10 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     }
     public static final class drawable {
         public static final int icon=0x7f020000;
+        public static final int remi=0x7f020001;
     }
     public static final class id {
-        public static final int action_settings=0x7f090015;
+        public static final int action_settings=0x7f090021;
         public static final int buttonAnnoncer=0x7f090010;
         public static final int buttonJouer=0x7f090012;
         public static final int button_coinch_utc=0x7f09000a;
@@ -46,15 +50,27 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int button_joueurs_connectes=0x7f090009;
         public static final int button_regles_du_jeu=0x7f09000c;
         public static final int button_rejoindre_partie=0x7f090008;
+        public static final int chatTextView=0x7f09001d;
+        public static final int chatViewLayout=0x7f09001c;
         public static final int idField=0x7f09000d;
         public static final int identifiant=0x7f090002;
         public static final int layout_conn=0x7f090001;
         public static final int mdp=0x7f090003;
-        public static final int partieBtn=0x7f090014;
+        public static final int messageToSend=0x7f09001f;
+        public static final int profilImage1=0x7f090015;
+        public static final int profilImage2=0x7f090017;
+        public static final int profilImage3=0x7f090018;
+        public static final int profilImage4=0x7f09001a;
+        public static final int profilName1=0x7f090014;
+        public static final int profilName2=0x7f090016;
+        public static final int profilName3=0x7f090019;
+        public static final int profilName4=0x7f09001b;
+        public static final int rowTextView=0x7f090020;
+        public static final int rulesGameList=0x7f090013;
+        public static final int sendMessageButton=0x7f09001e;
         public static final int spinnerAnnonce=0x7f09000e;
         public static final int spinnerCouleur=0x7f09000f;
         public static final int spinnerPoints=0x7f090011;
-        public static final int textView1=0x7f090013;
         public static final int text_accueil=0x7f090006;
         public static final int text_connexion=0x7f090000;
     }
@@ -68,6 +84,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int activity_partie=0x7f030006;
         public static final int activity_regles_du_jeu=0x7f030007;
         public static final int activity_rejoindre_partie=0x7f030008;
+        public static final int simplerow=0x7f030009;
     }
     public static final class menu {
         public static final int coinch_utc=0x7f080000;
@@ -82,6 +99,9 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int rejoindre_partie=0x7f080009;
     }
     public static final class string {
+        public static final int Credits=0x7f060023;
+        public static final int ImageProfil=0x7f060022;
+        public static final int Send=0x7f060021;
         public static final int accueil=0x7f060001;
         public static final int action_settings=0x7f06000f;
         public static final int annoncer=0x7f06001d;
@@ -98,6 +118,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int jouer=0x7f06001c;
         public static final int joueurs_connectes=0x7f060004;
         public static final int mdp=0x7f06000b;
+        public static final int messageToSendHint=0x7f060020;
         public static final int msg_controller_exc=0x7f06001a;
         public static final int msg_interface_exc=0x7f060019;
         public static final int partie=0x7f06001e;

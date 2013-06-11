@@ -33,5 +33,9 @@
     <string name="annoncer">ANNONCER</string>
     <string name="partie">PARTIE</string>
     <string name="title_activity_creer_compte">Creer un compte</string>
+    <string name="messageToSendHint">Ecrivez votre message...</string>
+    <string name="Send">ENVOYER</string>
+    <string name="ImageProfil">Profil</string>
+    <string name="Credits">Le jeu a été developpé par 4 étudiants de l\'UTC : Bruno Devaux, Rémi Clermont, Simon Lancelot, Yiou Wang. Pour toutes informations, envoyer-nous un mail à remi.clermont@gmail.com</string>
 
 </resources>

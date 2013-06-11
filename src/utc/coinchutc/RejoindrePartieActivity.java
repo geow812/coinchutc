@@ -9,14 +9,28 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class RejoindrePartieActivity extends Activity {
 
 	private String identifiant = "";
+	RelativeLayout layout = null;
+	TextView text = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rejoindre_partie);
+		layout = (RelativeLayout) RelativeLayout.inflate(this, R.layout.activity_rejoindre_partie, null);
+	    text = (TextView) layout.findViewById(R.id.profilName1);
+	    text.setText("Rémi");
+	    text = (TextView) layout.findViewById(R.id.profilName2);
+	    text.setText("Rémi");
+	    text = (TextView) layout.findViewById(R.id.profilName3);
+	    text.setText("Rémi");
+	    text = (TextView) layout.findViewById(R.id.profilName4);
+	    text.setText("Rémi");
+	    setContentView(layout);
 		// Show the Up button in the action bar.
 		setupActionBar();
 		Bundle extras = getIntent().getExtras();

@@ -8,13 +8,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".RejoindrePartieActivity" >
 
-    <TextView
+    <!--  <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:text="@string/hello_world" />-->
 
-    <Button
+    <!--  <Button
         android:id="@+id/partieBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,6 +22,101 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="35dp"
         android:onClick="partie"
-        android:text="@string/partie" />
+        android:text="@string/partie" />-->
+    
+    <TextView
+        android:id="@+id/profilName1"
+  		android:layout_width="wrap_content"
+   		android:layout_height="wrap_content"
+    	android:layout_alignParentTop="true"
+    	android:layout_alignParentLeft="true" />
+   	<ImageView
+        android:id="@+id/profilImage1"
+        android:layout_width="wrap_content"
+        android:contentDescription="@string/ImageProfil"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profilName1"
+        android:src="@drawable/remi" />
+    	
+ 	<TextView
+ 	    android:id="@+id/profilName2"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:layout_alignParentTop="true"
+    	android:layout_alignParentRight="true" />   
+    	
+ 	<ImageView
+        android:id="@+id/profilImage2"
+        android:layout_width="wrap_content"
+        android:contentDescription="@string/ImageProfil"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profilName2"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/remi" />
+ 	 <ImageView
+        android:id="@+id/profilImage3"
+        android:layout_width="wrap_content"
+        android:contentDescription="@string/ImageProfil"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true" 
+        android:src="@drawable/remi" />
+  	<TextView
+  	    android:id="@+id/profilName3"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:layout_alignParentLeft="true" 
+    	android:layout_above="@id/profilImage3" />
+  	<ImageView
+        android:id="@+id/profilImage4"
+        android:layout_width="wrap_content"
+        android:contentDescription="@string/ImageProfil"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" 
+        android:src="@drawable/remi" />
+  	<TextView
+  	    android:id="@+id/profilName4"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:layout_alignParentRight="true" 
+    	android:layout_above="@id/profilImage4" />
+  	
+  	
+  	<RelativeLayout
+  	    android:id="@+id/chatViewLayout"
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:textColor="@color/black" 
+    	android:layout_centerInParent="true"
+    	android:background="@color/greenLight"
+    	android:layout_marginRight="60dp"
+    	android:layout_marginLeft="60dp" >
+    	
+	   	<TextView
+	  	    android:id="@+id/chatTextView"
+	    	android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:textColor="@color/black"
+	    	android:text="@string/hello_world" /> 	
+
+	    
+	    <Button
+        	android:id="@+id/sendMessageButton"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:text="@string/Send" 
+        	android:textColor="@color/black"
+        	android:layout_alignParentRight="true"
+        	android:layout_alignParentBottom="true" />    
+        <EditText android:id="@+id/messageToSend"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:textColor="@color/black" 
+        	android:layout_above="@id/sendMessageButton"
+        	android:hint="@string/messageToSendHint" /> 
+	   
+    
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -1,5 +1,8 @@
 package utc.coinchutc;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import utc.coinchutc.R;
 
 import android.app.Activity;
@@ -7,15 +10,34 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 public class ReglesDuJeuActivity extends Activity {
 
+	private ListView mainListView ;  
+	private ArrayAdapter<String> listAdapter ;  
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_regles_du_jeu);
 		// Show the Up button in the action bar.
 		setupActionBar();
+	      
+	    // Find the ListView resource.   
+	    mainListView = (ListView) findViewById( R.id.rulesGameList );  
+	  
+	    // Create and populate a List of planet names.  
+	    String[] planets = new String[] { "Principe", "Le contrat", "La coinche", "Déroulement de la partie",  
+	                                      "Les points", "Les Annonces"};    
+	    ArrayList<String> planetList = new ArrayList<String>();  
+	    planetList.addAll( Arrays.asList(planets) );  
+	      
+	    // Create ArrayAdapter using the planet list.  
+	    listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, planetList);  
+	      
+	    // Set the ArrayAdapter as the ListView's adapter.  
+	    mainListView.setAdapter( listAdapter );
 	}
 
 	/**
