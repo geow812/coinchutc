@@ -23,13 +23,16 @@
         android:layout_marginTop="35dp"
         android:onClick="partie"
         android:text="@string/partie" />-->
-    
+    <ScrollView 
+        android:layout_marginBottom="50dip" 
+        android:id="@+id/ChatScroll" 
+        android:layout_height="wrap_content" 
+        android:layout_width="fill_parent">
     <TextView
         android:id="@+id/profilName1"
   		android:layout_width="wrap_content"
-   		android:layout_height="wrap_content"
-    	android:layout_alignParentTop="true"
-    	android:layout_alignParentLeft="true" />
+   		android:layout_height="wrap_content" />
+    </ScrollView>
    	<ImageView
         android:id="@+id/profilImage1"
         android:layout_width="wrap_content"
@@ -51,6 +54,7 @@
         android:contentDescription="@string/ImageProfil"
         android:layout_height="wrap_content"
         android:layout_below="@id/profilName2"
+        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:src="@drawable/remi" />
  	 <ImageView
