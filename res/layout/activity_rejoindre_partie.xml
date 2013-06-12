@@ -112,7 +112,18 @@
         	android:text="@string/Send" 
         	android:textColor="@color/black"
         	android:layout_alignParentRight="true"
-        	android:layout_alignParentBottom="true" />    
+        	android:layout_alignParentBottom="true" />  
+        	
+	    <Button
+        	android:id="@+id/demoPartie"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:text="@string/demo" 
+        	android:textColor="@color/black"
+        	android:onClick="partie"
+        	android:layout_alignParentLeft="true"
+        	android:layout_alignParentBottom="true" />  
+	    
         <EditText android:id="@+id/messageToSend"
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"

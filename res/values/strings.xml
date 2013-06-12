@@ -31,7 +31,7 @@
     <string name="title_activity_partie">Partie</string>
     <string name="jouer">JOUER</string>
     <string name="annoncer">ANNONCER</string>
-    <string name="partie">PARTIE</string>
+    <string name="demo">DEMO</string>
     <string name="joueur1">JOUEUR 1</string>
     <string name="joueur2">JOUEUR 2</string>
     <string name="joueur3">JOUEUR 3</string>
@@ -45,6 +45,8 @@
 	<string name="principe">Le principe</string>
 	<string name="contrat">Le contrat</string>
 	<string name="coinche">La coinche</string>
+	<string name="carte">carte</string>
+	
 	<string name="deroulement">Deroulement d\'une partie</string>
 	<string name="points">Les points</string>
 	<string name="annonces">Les annonces</string>
