@@ -46,7 +46,15 @@
 	<string name="contrat">Le contrat</string>
 	<string name="coinche">La coinche</string>
 	<string name="carte">carte</string>
-	
+	<string name="deposer_carte">Déposez votre carte ici</string>
+	<string name="annonceS">ANNONCE</string>
+	<string name="pt130">130</string>
+	<string name="pique">Pique</string>
+	<string name="scoresS">SCORES</string>
+	<string name="scoresN">Nous :</string>
+	<string name="pointsN">0 pts</string>
+	<string name="scoresE">Eux :</string>
+	<string name="pointsE">0 pts</string>
 	<string name="deroulement">Deroulement d\'une partie</string>
 	<string name="points">Les points</string>
 	<string name="annonces">Les annonces</string>

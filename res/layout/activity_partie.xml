@@ -8,6 +8,101 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".PartieActivity" >
 
+    <LinearLayout
+        android:id="@+id/annonceLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/forme_scores"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/annonceString"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="3dp"
+            android:text="@string/annonceS"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/annonceCouleur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="3dp"
+            android:text="@string/pt130"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/annoncePoints"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="3dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:text="@string/pique"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/scoresLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/forme_scores"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/scores"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="3dp"
+            android:text="@string/scoresS" />
+
+        <TextView
+            android:id="@+id/scoresNous"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="3dp"
+            android:text="@string/scoresN" />
+
+        <TextView
+            android:id="@+id/pointNous"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="3dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:text="@string/pointsN"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/scoresEux"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="3dp"
+            android:text="@string/scoresE" />
+
+        <TextView
+            android:id="@+id/pointEux"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="3dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:text="@string/pointsE"
+            android:textSize="13sp" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/joueur1"
         android:layout_width="wrap_content"
@@ -24,6 +119,46 @@
         android:layout_centerVertical="true"
         android:text="@string/joueur2" />
 
+    <LinearLayout
+        android:id="@+id/annonceLayoutJoueur2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/joueur2"
+        android:background="@drawable/forme_scores"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/annonceJ2String"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="3dp"
+            android:text="@string/annonceS"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/annonceJ2Couleur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="3dp"
+            android:text="@string/pt130"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/annonceJ2Points"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="3dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:text="@string/pique"
+            android:textSize="13sp" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/joueur3"
         android:layout_width="wrap_content"
@@ -31,6 +166,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:text="@string/joueur3" />
+    <!-- Le layout d'annonce du joueur 3 est à la fin du document -->
 
     <TextView
         android:id="@+id/joueur4"
@@ -41,97 +177,233 @@
         android:text="@string/joueur4" />
 
     <LinearLayout
+        android:id="@+id/annonceLayoutJoueur4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/joueur4"
+        android:background="@drawable/forme_scores"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/annonceJ4String"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="3dp"
+            android:text="@string/annonceS"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/annonceJ4Couleur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="3dp"
+            android:text="@string/pt130"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/annonceJ4Points"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="3dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:text="@string/pique"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/cartesjoueur1"
         android:layout_width="wrap_content"
-        android:layout_above="@+id/joueur1"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/joueur1"
         android:layout_centerHorizontal="true"
         android:orientation="horizontal" >
 
         <ImageView
             android:id="@+id/carte1"
-            android:contentDescription="@string/carte"
-            android:layout_height="50dp"
             android:layout_width="33dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/carte"
             android:scaleType="fitXY"
-            android:src="@drawable/carreau10" 
-            />
+            android:src="@drawable/carreau14" />
+
         <ImageView
             android:id="@+id/carte2"
-            android:contentDescription="@string/carte"
-            android:layout_height="50dp"
             android:layout_width="33dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/carte"
             android:scaleType="fitXY"
-            android:src="@drawable/carreau10"
-             />
+            android:src="@drawable/carreau13" />
+
         <ImageView
             android:id="@+id/carte3"
-            android:contentDescription="@string/carte"
-            android:layout_height="50dp"
             android:layout_width="33dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/carte"
             android:scaleType="fitXY"
-            android:src="@drawable/carreau10"
-             />
+            android:src="@drawable/carreau12" />
+
         <ImageView
             android:id="@+id/carte4"
-            android:contentDescription="@string/carte"
-            android:layout_height="50dp"
             android:layout_width="33dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/carte"
             android:scaleType="fitXY"
-            android:src="@drawable/carreau10"
-             />
+            android:src="@drawable/carreau11" />
+
         <ImageView
             android:id="@+id/carte5"
-            android:contentDescription="@string/carte"
-            android:layout_height="50dp"
             android:layout_width="33dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/carte"
             android:scaleType="fitXY"
-            android:src="@drawable/carreau10"
-             />
+            android:src="@drawable/carreau10" />
+
         <ImageView
             android:id="@+id/carte6"
-            android:contentDescription="@string/carte"
-            android:layout_height="50dp"
             android:layout_width="33dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/carte"
             android:scaleType="fitXY"
-            android:src="@drawable/carreau10"
-             />
+            android:src="@drawable/carreau9" />
+
         <ImageView
             android:id="@+id/carte7"
-            android:contentDescription="@string/carte"
-            android:layout_height="50dp"
             android:layout_width="33dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/carte"
             android:scaleType="fitXY"
-            android:src="@drawable/carreau10"
-             />
+            android:src="@drawable/carreau8" />
+
         <ImageView
             android:id="@+id/carte8"
-            android:contentDescription="@string/carte"
-            android:layout_height="50dp"
             android:layout_width="33dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/carte"
             android:scaleType="fitXY"
-            android:src="@drawable/carreau10"
-             />
-        
+            android:src="@drawable/carreau7" />
     </LinearLayout>
-    
-    <RelativeLayout 
-       android:id="@+id/tapis"
-    	android:layout_width="fill_parent"
-    	android:layout_height="fill_parent"
-    	android:textColor="@color/black" 
-    	android:layout_centerInParent="true"
-    	android:background="@color/greenLight"
-		android:layout_toRightOf="@id/joueur2"
-		android:layout_toLeftOf="@id/joueur4"
-		android:layout_below="@id/joueur3"
-		android:layout_above="@id/cartesjoueur1"
-		android:layout_marginRight="10dp"
-    	android:layout_marginLeft="10dp"
-    	android:layout_marginTop="30dp"
-    	android:layout_marginBottom="30dp"
-    	 >
-        
+
+    <RelativeLayout
+        android:id="@+id/tapis"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/cartesjoueur1"
+        android:layout_below="@id/joueur3"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_toLeftOf="@id/joueur4"
+        android:layout_toRightOf="@id/joueur2"
+        android:background="@drawable/forme_tapis"
+        android:textColor="@color/black" >
+
+        <TextView
+            android:id="@+id/deposer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toLeftOf="@+id/cartejouee4"
+            android:layout_toRightOf="@+id/cartejouee2"
+            android:text="@string/deposer_carte"
+            android:textSize="13sp" />
+
+        <ImageView
+            android:id="@+id/cartejouee1"
+            android:layout_width="33dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
+            android:contentDescription="@string/carte"
+            android:scaleType="fitXY"
+            android:src="@drawable/trefle10" />
+
+        <ImageView
+            android:id="@+id/cartejouee2"
+            android:layout_width="33dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:contentDescription="@string/carte"
+            android:scaleType="fitXY"
+            android:src="@drawable/pique10" />
+
+        <ImageView
+            android:id="@+id/cartejouee3"
+            android:layout_width="33dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:contentDescription="@string/carte"
+            android:scaleType="fitXY"
+            android:src="@drawable/pique10" />
+
+        <ImageView
+            android:id="@+id/cartejouee4"
+            android:layout_width="33dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:contentDescription="@string/carte"
+            android:scaleType="fitXY"
+            android:src="@drawable/pique10" />
     </RelativeLayout>
+
+    <!--
+     j'ai mis ce layout en dernier car sinon il apparaissait en dessous du tapis :
+     la profondeur d'un élément se fait en fonction de l'ordre d'apparition dans le xml
+    -->
+
+    <LinearLayout
+        android:id="@+id/annonceLayoutJoueur3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/joueur3"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/forme_scores"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/annonceJ3String"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="3dp"
+            android:text="@string/annonceS"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/annonceJ3Couleur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="3dp"
+            android:text="@string/pt130"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/annonceJ1Points"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="3dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:text="@string/pique"
+            android:textSize="13sp" />
+    </LinearLayout>
 
 </RelativeLayout>

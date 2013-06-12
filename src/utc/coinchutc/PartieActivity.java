@@ -23,7 +23,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NavUtils;
@@ -38,7 +37,8 @@ import android.view.View.OnDragListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -54,7 +54,6 @@ public class PartieActivity extends Activity {
 	private MicroRuntimeServiceBinder microRuntimeServiceBinder;
 	private ServiceConnection serviceConnection;
 	private AlertDialog.Builder adb;
-	private AlertDialog dialogAnnonce;
 
 
 
@@ -66,11 +65,8 @@ public class PartieActivity extends Activity {
 		setupActionBar();
 
 
-		// Assign the touch listener to your view which you want to move
-		 TODO : findViewById(R.id.carte1).setOnTouchListener(new MyTouchListener());
 
-
-		// TODO : findViewById(R.id.bottomright).setOnDragListener(new MyDragListener());
+		findViewById(R.id.tapis).setOnDragListener(new MyDragListener());
 
 
 
@@ -83,6 +79,48 @@ public class PartieActivity extends Activity {
 			joueur1 = (TextView)findViewById(R.id.joueur1);
 			joueur1.setText(identifiant);
 		}
+
+		// Assign the touch listener to your view which you want to move :
+		findViewById(R.id.carte1).setOnTouchListener(new MyTouchListener());
+		/* exemple de code pour changer l'image :
+		ImageView img = (ImageView)findViewById(R.id.carte1);
+		img.setImageResource(resId);
+		 */
+
+
+		findViewById(R.id.carte2).setOnTouchListener(new MyTouchListener());
+		findViewById(R.id.carte3).setOnTouchListener(new MyTouchListener());
+		findViewById(R.id.carte4).setOnTouchListener(new MyTouchListener());
+		findViewById(R.id.carte5).setOnTouchListener(new MyTouchListener());
+		findViewById(R.id.carte6).setOnTouchListener(new MyTouchListener());
+		findViewById(R.id.carte7).setOnTouchListener(new MyTouchListener());
+		findViewById(R.id.carte8).setOnTouchListener(new MyTouchListener());
+
+
+
+
+		//On appelle la méthode de lancement de partie ci dessous
+		//lancePartie();
+	}
+	//Fin de onCreate()
+
+	public void lancePartie(View view) {
+
+
+		try {
+			SharedPreferences settings = getSharedPreferences("jadeChatPrefsFile", 0);
+			String host = settings.getString("defaultHost", "");
+			String port = settings.getString("defaultPort", "");
+			startChat(identifiant, host, port, agentStartupCallback);
+			SharedPreferences.Editor editor = settings.edit();
+			editor.putBoolean(MainActivity.CONNECTE, true);
+			editor.commit();
+			//				Intent intent = new Intent(this, MainActivity.class);
+			//				intent.putExtra("identifiant", identifiant);
+			//				startActivity(intent);
+		} catch (Exception ex) {
+			logger.log(Level.SEVERE, "Unexpected exception creating chat agent!");
+		}
 	}
 
 	// This defines your touch listener
@@ -92,49 +130,60 @@ public class PartieActivity extends Activity {
 				ClipData data = ClipData.newPlainText("", "");
 				DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
 				view.startDrag(data, shadowBuilder, view, 0);
-				view.setVisibility(View.INVISIBLE);
+				view.setVisibility(View.GONE);
 				return true;
 			} else {
 				return false;
 			}
 		}
 	} 		
-/*
+
 	class MyDragListener implements OnDragListener {
-		Drawable enterShape = getResources().getDrawable(R.id.tapis);
-		Drawable normalShape = getResources().getDrawable(R.id.shape);
+		//Drawable enterShape = getResources().getDrawable(R.id.tapis);
+		//Drawable normalShape = getResources().getDrawable(R.id.tapis);
+
+		TextView deposer = (TextView)findViewById(R.id.deposer);
 
 		@Override
 		public boolean onDrag(View v, DragEvent event) {
-			int action = event.getAction();
 			switch (event.getAction()) {
 			case DragEvent.ACTION_DRAG_STARTED:
 				// Do nothing
 				break;
 			case DragEvent.ACTION_DRAG_ENTERED:
-				v.setBackgroundDrawable(enterShape);
+				// original : v.setBackgroundDrawable(enterShape);
+				deposer.setText("Lacher pour deposer");
+
 				break;
 			case DragEvent.ACTION_DRAG_EXITED:        
-				v.setBackgroundDrawable(normalShape);
+				//original : v.setBackgroundDrawable(normalShape);
+				View view2 = (View) event.getLocalState();
+				view2.setVisibility(View.VISIBLE);
+				deposer.setText("");
 				break;
 			case DragEvent.ACTION_DROP:
 				// Dropped, reassign View to ViewGroup
-				View view = (View) event.getLocalState();
-				ViewGroup owner = (ViewGroup) view.getParent();
-				owner.removeView(view);
-				LinearLayout container = (LinearLayout) v;
-				container.addView(view);
-				view.setVisibility(View.VISIBLE);
+				ImageView carteJouee = (ImageView) event.getLocalState();
+				ImageView carteTapis = (ImageView) findViewById(R.id.cartejouee1);
+				carteTapis.setImageDrawable(carteJouee.getDrawable());
+				deposer.setText("");
+
+				//TODO: déplacer cette méthode là où on en a besoin (elle est ici pour demonstration)
+				//Elle permet d'afficher la boite de dialogue, pour l'instant on l'affiche dès qu'on drop une carte
+				annoncer();
+
+
 				break;
 			case DragEvent.ACTION_DRAG_ENDED:
-				v.setBackgroundDrawable(normalShape);
+				//v.setBackgroundDrawable(normalShape);
 			default:
 				break;
 			}
 			return true;
 		}
-	} */
+	} 
 
+	//Affiche la boite de dialogue pour annoncer :
 	public void annoncer() {
 
 		//Boite de dialogue pour annoncer :
@@ -142,57 +191,55 @@ public class PartieActivity extends Activity {
 		LayoutInflater factory = LayoutInflater.from(this);
 		final View annonceDialogView = factory.inflate(R.layout.annonce, null);
 
-		if (adb == null) {
+		//Si on a pas encore créé le builder, on le fait :
+		if (adb == null) { //Note: adb est un attribut de la class
 			adb = new AlertDialog.Builder(PartieActivity.this);
-
-			//On affecte la vue personnalisé que l'on a crée à notre AlertDialog
-			adb.setView(annonceDialogView);
-
-			//On donne un titre à l'AlertDialog
-			adb.setTitle("A vous d'annoncer :");
-
-			//On peut modifier l'icone si besoin (TODO)
-			//adb.setIcon(android.R.drawable.ic_dialog_alert);
-
-			//On affecte un bouton "Annoncer" à notre AlertDialog et on lui affecte un évènement
-			adb.setPositiveButton("Annoncer", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					//TODO : c'est ici qu'on va gérer l'envoi de l'annonce à notre serveur en Jade
-					//Lorsque l'on cliquera sur le bouton "OK", on récupère l'EditText correspondant à notre vue personnalisée (cad à alertDialogView)
-					//EditText et = (EditText)alertDialogView.findViewById(R.id.EditText1);
-
-					//On affiche dans un Toast le texte contenu dans l'EditText de notre AlertDialog
-					//Toast.makeText(Tutoriel18_Android.this, et.getText(), Toast.LENGTH_SHORT).show();
-				} });
-			//On crée un bouton "Passer" à notre AlertDialog et on lui affecte un évènement
-			adb.setNegativeButton("Passer", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					//TODO : c'est ici qu'on va gérer signaler que le joueur passe à notre serveur en Jade
-
-				} });
-
-
-
-			//Création des menus déroulants (couleur et points a annocner)
-			spinnerAnnonce=(Spinner)annonceDialogView.findViewById(R.id.spinnerCouleur);
-			ArrayAdapter<String> adapterAnnonce = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, annonces);  
-			adapterAnnonce.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			spinnerAnnonce.setAdapter(adapterAnnonce);
-
-			spinnerCouleur=(Spinner)annonceDialogView.findViewById(R.id.spinnerAnnonce);
-			ArrayAdapter<String>adapterCouleur = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, couleurs);
-			adapterCouleur.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			spinnerCouleur.setAdapter(adapterCouleur); 
-
-
-			//On affiche :
-			adb.show();
 		}
 
-		else {
-			// TODO : si on a déjà afficher la boite de dialogue, il faut mettre a jour
+		//On affecte la vue personnalisé que l'on a crée à notre AlertDialog
+		adb.setView(annonceDialogView);
 
-		}
+		//On donne un titre à l'AlertDialog
+		adb.setTitle("A vous d'annoncer :");
+
+		//On peut modifier l'icone si besoin (TODO)
+		//adb.setIcon(android.R.drawable.ic_dialog_alert);
+
+		//On affecte un bouton "Annoncer" à notre AlertDialog et on lui affecte un évènement
+		adb.setPositiveButton("Annoncer", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				//TODO : c'est ici qu'on va gérer l'envoi de l'annonce à notre serveur en Jade
+				//Lorsque l'on cliquera sur le bouton "OK", on récupère l'EditText correspondant à notre vue personnalisée (cad à alertDialogView)
+				//EditText et = (EditText)alertDialogView.findViewById(R.id.EditText1);
+
+				//On affiche dans un Toast le texte contenu dans l'EditText de notre AlertDialog
+				//Toast.makeText(Tutoriel18_Android.this, et.getText(), Toast.LENGTH_SHORT).show();
+			} });
+		//On crée un bouton "Passer" à notre AlertDialog et on lui affecte un évènement
+		adb.setNegativeButton("Passer", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				//TODO : c'est ici qu'on va gérer signaler que le joueur passe à notre serveur en Jade
+
+			} });
+
+
+
+		//Création des menus déroulants (couleur et points a annocner)
+		spinnerAnnonce=(Spinner)annonceDialogView.findViewById(R.id.spinnerCouleur);
+		ArrayAdapter<String> adapterAnnonce = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, annonces);  
+		adapterAnnonce.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerAnnonce.setAdapter(adapterAnnonce);
+
+		spinnerCouleur=(Spinner)annonceDialogView.findViewById(R.id.spinnerAnnonce);
+		ArrayAdapter<String>adapterCouleur = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, couleurs);
+		adapterCouleur.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerCouleur.setAdapter(adapterCouleur); 
+
+
+		//On affiche :
+		adb.show();
+
+
 
 	}
 
@@ -230,23 +277,6 @@ public class PartieActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	public void lancePartie(View view) {
-		try {
-			SharedPreferences settings = getSharedPreferences("jadeChatPrefsFile", 0);
-			String host = settings.getString("defaultHost", "");
-			String port = settings.getString("defaultPort", "");
-			startChat(identifiant, host, port, agentStartupCallback);
-			SharedPreferences.Editor editor = settings.edit();
-			editor.putBoolean(MainActivity.CONNECTE, true);
-			editor.commit();
-			//				Intent intent = new Intent(this, MainActivity.class);
-			//				intent.putExtra("identifiant", identifiant);
-			//				startActivity(intent);
-		} catch (Exception ex) {
-			logger.log(Level.SEVERE, "Unexpected exception creating chat agent!");
-		}
 	}
 
 	private RuntimeCallback<AgentController> agentStartupCallback = new RuntimeCallback<AgentController>() {
