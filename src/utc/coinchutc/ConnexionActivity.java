@@ -241,6 +241,7 @@ public class ConnexionActivity extends Activity {
 	public void login() {
 		Intent intent = new Intent(this, MainActivity.class);
 		intent.putExtra("identifiant", identifiant);
+		Log.d("ConnexionActivity", identifiant + "login");
 		startActivity(intent);
 	}
 	
@@ -253,6 +254,7 @@ public class ConnexionActivity extends Activity {
 			if (action.equalsIgnoreCase("coinchutc.LOGIN_SUCCESS")) {
 				//ShowDialog("Login succeeded!");
 				login();
+				Log.d("ConnexionActivity", "Login succeeded!");
 			}
 			if (action.equalsIgnoreCase("coinchutc.LOGIN_FAIL")) {
 				ShowDialog("Login a ¨¦chou¨¦");

@@ -19,13 +19,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
-    
-	    <Button
-	        style="@style/BoutonGrand"
-	        android:id="@+id/button_creer_partie"
-	        android:layout_gravity="center_horizontal"
-	        android:onClick="creerPartie"
-	        android:text="@string/creer_partie" />
+
 	    <Button
 	        style="@style/BoutonGrand"
 	        android:id="@+id/button_rejoindre_partie"
