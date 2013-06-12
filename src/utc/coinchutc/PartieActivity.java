@@ -54,7 +54,6 @@ public class PartieActivity extends Activity {
 	private MicroRuntimeServiceBinder microRuntimeServiceBinder;
 	private ServiceConnection serviceConnection;
 	private AlertDialog.Builder adb;
-	private AlertDialog dialogAnnonce;
 
 
 
@@ -147,7 +146,6 @@ public class PartieActivity extends Activity {
 
 		@Override
 		public boolean onDrag(View v, DragEvent event) {
-			int action = event.getAction();
 			switch (event.getAction()) {
 			case DragEvent.ACTION_DRAG_STARTED:
 				// Do nothing
@@ -170,7 +168,8 @@ public class PartieActivity extends Activity {
 				carteTapis.setImageDrawable(carteJouee.getDrawable());
 				deposer.setText("");
 
-				//TODO: déplacer cette méthode (ici pour demonstration) :
+				//TODO: déplacer cette méthode là où on en a besoin (elle est ici pour demonstration)
+				//Elle permet d'afficher la boite de dialogue, pour l'instant on l'affiche dès qu'on drop une carte
 				annoncer();
 
 
@@ -193,7 +192,7 @@ public class PartieActivity extends Activity {
 		final View annonceDialogView = factory.inflate(R.layout.annonce, null);
 
 		//Si on a pas encore créé le builder, on le fait :
-		if (adb == null) {
+		if (adb == null) { //Note: adb est un attribut de la class
 			adb = new AlertDialog.Builder(PartieActivity.this);
 		}
 
