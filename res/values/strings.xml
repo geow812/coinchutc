@@ -46,6 +46,7 @@
 	<string name="contrat">Le contrat</string>
 	<string name="coinche">La coinche</string>
 	<string name="carte">carte</string>
+	<string name="deposer_carte">Déposez votre carte ici</string>
 	
 	<string name="deroulement">Deroulement d\'une partie</string>
 	<string name="points">Les points</string>
