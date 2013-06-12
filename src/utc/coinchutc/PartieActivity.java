@@ -16,24 +16,31 @@ import java.util.logging.Level;
 import utc.coinchutc.agent.CoincheClientAgent;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ClipData;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NavUtils;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.DragShadowBuilder;
+import android.view.View.OnDragListener;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class PartieActivity extends Activity {
 
@@ -46,7 +53,10 @@ public class PartieActivity extends Activity {
 	private String identifiant = "";
 	private MicroRuntimeServiceBinder microRuntimeServiceBinder;
 	private ServiceConnection serviceConnection;
+	private AlertDialog.Builder adb;
 	private AlertDialog dialogAnnonce;
+
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,58 +66,12 @@ public class PartieActivity extends Activity {
 		setupActionBar();
 
 
-		//Boite de dialogue pour annoncer :
-		// ------ code récupéré de : http://www.tutomobile.fr/personnaliser-un-alertdialog-tutoriel-android-n%C2%B020/04/11/2010/
-		LayoutInflater factory = LayoutInflater.from(this);
-		final View annonceDialogView = factory.inflate(R.layout.annonce, null);
-
-		AlertDialog.Builder adb = new AlertDialog.Builder(PartieActivity.this);
-
-		//On affecte la vue personnalisé que l'on a crée à notre AlertDialog
-		adb.setView(annonceDialogView);
-
-		//On donne un titre à l'AlertDialog
-		adb.setTitle("A vous d'annoncer :");
-
-		//On peut modifier l'icone si besoin (TODO)
-		//adb.setIcon(android.R.drawable.ic_dialog_alert);
-
-		//On affecte un bouton "Annoncer" à notre AlertDialog et on lui affecte un évènement
-		adb.setPositiveButton("Annoncer", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				//TODO : c'est ici qu'on va gérer l'envoi de l'annonce à notre serveur en Jade
-				//Lorsque l'on cliquera sur le bouton "OK", on récupère l'EditText correspondant à notre vue personnalisée (cad à alertDialogView)
-				//EditText et = (EditText)alertDialogView.findViewById(R.id.EditText1);
-
-				//On affiche dans un Toast le texte contenu dans l'EditText de notre AlertDialog
-				//Toast.makeText(Tutoriel18_Android.this, et.getText(), Toast.LENGTH_SHORT).show();
-			} });
-		//On crée un bouton "Passer" à notre AlertDialog et on lui affecte un évènement
-		adb.setNegativeButton("Passer", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				//TODO : c'est ici qu'on va gérer signaler que le joueur passe à notre serveur en Jade
-
-			} });
-
-		
-		
-		//Création des menus déroulants (couleur et points a annocner)
-		spinnerAnnonce=(Spinner)annonceDialogView.findViewById(R.id.spinnerCouleur);
-		ArrayAdapter<String> adapterAnnonce = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, annonces);  
-		adapterAnnonce.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinnerAnnonce.setAdapter(adapterAnnonce);
-		
-		spinnerCouleur=(Spinner)annonceDialogView.findViewById(R.id.spinnerAnnonce);
-		ArrayAdapter<String>adapterCouleur = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, couleurs);
-		adapterCouleur.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinnerCouleur.setAdapter(adapterCouleur); 
+		// Assign the touch listener to your view which you want to move
+		 TODO : findViewById(R.id.carte1).setOnTouchListener(new MyTouchListener());
 
 
-		//On créer notre boite de dialogue qu'on affecte à notre attribut privé :
-		dialogAnnonce = adb.create();
-		
-		//On l'affiche :
-		dialogAnnonce.show();
+		// TODO : findViewById(R.id.bottomright).setOnDragListener(new MyDragListener());
+
 
 
 		//Affichage des noms des joueurs
@@ -119,7 +83,116 @@ public class PartieActivity extends Activity {
 			joueur1 = (TextView)findViewById(R.id.joueur1);
 			joueur1.setText(identifiant);
 		}
+	}
 
+	// This defines your touch listener
+	private final class MyTouchListener implements OnTouchListener {
+		public boolean onTouch(View view, MotionEvent motionEvent) {
+			if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+				ClipData data = ClipData.newPlainText("", "");
+				DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+				view.startDrag(data, shadowBuilder, view, 0);
+				view.setVisibility(View.INVISIBLE);
+				return true;
+			} else {
+				return false;
+			}
+		}
+	} 		
+/*
+	class MyDragListener implements OnDragListener {
+		Drawable enterShape = getResources().getDrawable(R.id.tapis);
+		Drawable normalShape = getResources().getDrawable(R.id.shape);
+
+		@Override
+		public boolean onDrag(View v, DragEvent event) {
+			int action = event.getAction();
+			switch (event.getAction()) {
+			case DragEvent.ACTION_DRAG_STARTED:
+				// Do nothing
+				break;
+			case DragEvent.ACTION_DRAG_ENTERED:
+				v.setBackgroundDrawable(enterShape);
+				break;
+			case DragEvent.ACTION_DRAG_EXITED:        
+				v.setBackgroundDrawable(normalShape);
+				break;
+			case DragEvent.ACTION_DROP:
+				// Dropped, reassign View to ViewGroup
+				View view = (View) event.getLocalState();
+				ViewGroup owner = (ViewGroup) view.getParent();
+				owner.removeView(view);
+				LinearLayout container = (LinearLayout) v;
+				container.addView(view);
+				view.setVisibility(View.VISIBLE);
+				break;
+			case DragEvent.ACTION_DRAG_ENDED:
+				v.setBackgroundDrawable(normalShape);
+			default:
+				break;
+			}
+			return true;
+		}
+	} */
+
+	public void annoncer() {
+
+		//Boite de dialogue pour annoncer :
+		// ------ code récupéré de : http://www.tutomobile.fr/personnaliser-un-alertdialog-tutoriel-android-n%C2%B020/04/11/2010/
+		LayoutInflater factory = LayoutInflater.from(this);
+		final View annonceDialogView = factory.inflate(R.layout.annonce, null);
+
+		if (adb == null) {
+			adb = new AlertDialog.Builder(PartieActivity.this);
+
+			//On affecte la vue personnalisé que l'on a crée à notre AlertDialog
+			adb.setView(annonceDialogView);
+
+			//On donne un titre à l'AlertDialog
+			adb.setTitle("A vous d'annoncer :");
+
+			//On peut modifier l'icone si besoin (TODO)
+			//adb.setIcon(android.R.drawable.ic_dialog_alert);
+
+			//On affecte un bouton "Annoncer" à notre AlertDialog et on lui affecte un évènement
+			adb.setPositiveButton("Annoncer", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					//TODO : c'est ici qu'on va gérer l'envoi de l'annonce à notre serveur en Jade
+					//Lorsque l'on cliquera sur le bouton "OK", on récupère l'EditText correspondant à notre vue personnalisée (cad à alertDialogView)
+					//EditText et = (EditText)alertDialogView.findViewById(R.id.EditText1);
+
+					//On affiche dans un Toast le texte contenu dans l'EditText de notre AlertDialog
+					//Toast.makeText(Tutoriel18_Android.this, et.getText(), Toast.LENGTH_SHORT).show();
+				} });
+			//On crée un bouton "Passer" à notre AlertDialog et on lui affecte un évènement
+			adb.setNegativeButton("Passer", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					//TODO : c'est ici qu'on va gérer signaler que le joueur passe à notre serveur en Jade
+
+				} });
+
+
+
+			//Création des menus déroulants (couleur et points a annocner)
+			spinnerAnnonce=(Spinner)annonceDialogView.findViewById(R.id.spinnerCouleur);
+			ArrayAdapter<String> adapterAnnonce = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, annonces);  
+			adapterAnnonce.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			spinnerAnnonce.setAdapter(adapterAnnonce);
+
+			spinnerCouleur=(Spinner)annonceDialogView.findViewById(R.id.spinnerAnnonce);
+			ArrayAdapter<String>adapterCouleur = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, couleurs);
+			adapterCouleur.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			spinnerCouleur.setAdapter(adapterCouleur); 
+
+
+			//On affiche :
+			adb.show();
+		}
+
+		else {
+			// TODO : si on a déjà afficher la boite de dialogue, il faut mettre a jour
+
+		}
 
 	}
 
@@ -273,6 +346,6 @@ public class PartieActivity extends Activity {
 			}
 		});
 	}
-
-
 }
+
+
