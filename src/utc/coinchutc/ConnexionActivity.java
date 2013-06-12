@@ -216,7 +216,7 @@ public class ConnexionActivity extends Activity {
 	}
 	
 	private void startAgent(final String identifiant, final String mdp, final String option, final RuntimeCallback<AgentController> agentStartupCallback) {
-		microRuntimeServiceBinder.startAgent(identifiant, ConnexionAgent.class.getName(),
+		microRuntimeServiceBinder.startAgent("Conn-" + identifiant, ConnexionAgent.class.getName(),
 				new Object[] { getApplicationContext(), mdp, option },
 				new RuntimeCallback<Void>() {
 					@Override

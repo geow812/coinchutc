@@ -83,12 +83,12 @@ public class MainActivity extends Activity {
 	public void deconnecter(View view) {
 		if (MicroRuntime.isRunning()) {
 			try {
-				AgentController ac = MicroRuntime.getAgent(identifiant);
+				AgentController ac = MicroRuntime.getAgent("Conn-" + identifiant);
 				coincheClientInterface = ac.getO2AInterface(ConnextionInterface.class);
 				if (coincheClientInterface != null)
 					coincheClientInterface.deconnexion();
 				try {
-					MicroRuntime.killAgent(identifiant);
+					MicroRuntime.killAgent("Conn-" + identifiant);
 					//MicroRuntime.detach();
 				} catch (NotFoundException e) {
 					// TODO Auto-generated catch block

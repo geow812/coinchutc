@@ -4,30 +4,38 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class RejoindrePartieActivity extends Activity {
-	
-	
+
+
 	//ArrayList that will hold the original Data
 	ArrayList<HashMap<String, Object>> players;
 	LayoutInflater inflater;
+	ListView list_players;
 
+	protected static String names[];
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rejoindre_partie);
-		ListView list_players = (ListView) findViewById(R.id.list_connected_players);
-
+		list_players = (ListView) findViewById(R.id.list_connected_players);
 
 
 		//get the LayoutInflater for inflating the customomView
@@ -70,13 +78,37 @@ public class RejoindrePartieActivity extends Activity {
 		 *third param-the set of values that
    will populate the ListView */
 		final CustomAdapter adapter=new CustomAdapter(this, R.layout.list_connected_players, players);
+		list_players.setOnItemClickListener(new OnItemClickListener(){
+			@Override
+			public void onItemClick(AdapterView<?> parent, View v, int position, long id) { 
+				View view = (View) findViewById(R.layout.profil_dialogbox);
+				LayoutInflater factory = LayoutInflater.from(RejoindrePartieActivity.this);
+				final View profilDialogBoxView = factory.inflate(R.layout.profil_dialogbox, null);
+				String value = list_players.getItemAtPosition(position).toString();
+				Log.i("Position:", value);
+				AlertDialog.Builder builder = new AlertDialog.Builder(RejoindrePartieActivity.this);
+				builder.setTitle("Profil de RÈmi")
+				.setView(profilDialogBoxView)
+				.setIcon(R.drawable.rclermon)
+				.setCancelable(false)
+				.setPositiveButton("Fermer", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						
+					}
+				});
+
+				builder.create().show();
+			}
+		});
+
 
 		//finally,set the adapter to the default ListView
 		list_players.setAdapter(adapter);
-		
+
 
 
 	}
+
 
 
 	//define your custom adapter
@@ -113,7 +145,6 @@ public class RejoindrePartieActivity extends Activity {
 
 		@Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
-
 			if(convertView==null)
 			{
 				convertView=inflater.inflate(R.layout.list_connected_players, null);
