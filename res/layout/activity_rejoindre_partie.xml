@@ -105,8 +105,8 @@
         	android:id="@+id/sendMessageButton"
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
-        	android:text="@string/Send" 
-        	android:textColor="@color/black"
+            android:text="@string/envoyer"
+            android:onClick="envoyer" >
         	android:layout_alignParentRight="true"
         	android:layout_alignParentBottom="true" />  
         	
