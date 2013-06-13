@@ -68,4 +68,8 @@
 	<string name="regle_points">Deux cas de figure se présentent: Si l\'équipe qui a demandé le contrat a réalisé celui-ci, alors elle gagne autant de points que le nombre spécifié dans le contrat auquel on ajoute le nombre de points effectivement réalisé (arrondi à la dizaine la plus proche). Si l\'équipe adverse n\'a remporté aucun pli, les preneurs marquent une prime supplémentaire de 90 points. L\'équipe adverse marque uniquement les points réalisés. Si par contre, le contrat n\'est pas réalisé, alors l\'équipe ne gagne aucun point et c\'est l\'équipe adverse qui cette fois remporte 160 points auxquels on ajoute les points du contrat demandé.</string>
 	<string name="regle_annonces">Les mêmes qu\'à la belote. Elles permettent de remporter son contrat.</string>
 	<string name="envoyer">Envoyer</string>
+	<string name="text_joueur">Joueurs Connectés</string>
+    <string name="text_chat">Chat</string>
+	<string name="ready">Pret</string>
+	
 </resources>
