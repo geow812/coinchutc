@@ -1,18 +1,16 @@
 package utc.coinchutc;
 
 import jade.core.MicroRuntime;
-import jade.core.NotFoundException;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
-import utc.coinchutc.agent.ConnextionInterface;
+import utc.coinchutc.agent.CoincheClientInterface;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
@@ -21,7 +19,7 @@ public class MainActivity extends Activity {
 	public static final String CONNECTE = "connecte";
 	private boolean connecte = false;
 	private String identifiant = "";
-	private ConnextionInterface coincheClientInterface = null;
+	private CoincheClientInterface coincheClientInterface = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,15 +27,16 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		SharedPreferences settings = getSharedPreferences("jadeChatPrefsFile",0);
 		connecte = settings.getBoolean(CONNECTE, false);
-		Log.d("MainActivity", "MainActivity starts!");
-		Bundle extras = getIntent().getExtras();
-		if (extras != null && connecte) {
-			Log.d("MainActivity", identifiant);
-			identifiant = extras.getString("identifiant");
-		}
-		else {
+		if (!connecte) {
 			finish();
 			login();
+		}
+		else {
+			Bundle extras = getIntent().getExtras();
+			if (extras != null) {
+				identifiant = extras.getString("identifiant");
+				//showAlertDialog(identifiant, false);
+			}
 		}
 	}
 
@@ -46,6 +45,11 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+	
+	public void creerPartie(View view) {
+		Intent intent = new Intent(this, CreerPartieActivity.class);
+		startActivity(intent);
 	}
 	
 	public void rejoindrePartie(View view) {
@@ -83,17 +87,11 @@ public class MainActivity extends Activity {
 	public void deconnecter(View view) {
 		if (MicroRuntime.isRunning()) {
 			try {
-				AgentController ac = MicroRuntime.getAgent("Conn-" + identifiant);
-				coincheClientInterface = ac.getO2AInterface(ConnextionInterface.class);
+				AgentController ac = MicroRuntime.getAgent(identifiant);
+//				showAlertDialog(ac.getName(), false);
+				coincheClientInterface = ac.getO2AInterface(CoincheClientInterface.class);
 				if (coincheClientInterface != null)
 					coincheClientInterface.deconnexion();
-				try {
-					MicroRuntime.killAgent("Conn-" + identifiant);
-					//MicroRuntime.detach();
-				} catch (NotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			} catch (StaleProxyException e) {
 				showAlertDialog(getString(R.string.msg_interface_exc), true);
 			} catch (ControllerException e) {

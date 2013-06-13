@@ -9,34 +9,17 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-public class RejoindrePartieActivity extends Activity {
+public class CreerPartieActivity extends Activity {
+	
 
-	private String identifiant = "";
-	RelativeLayout layout = null;
-	TextView text = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_rejoindre_partie);
-		layout = (RelativeLayout) RelativeLayout.inflate(this, R.layout.activity_rejoindre_partie, null);
-	    text = (TextView) layout.findViewById(R.id.profilName1);
-	    text.setText("R¨¦mi");
-	    text = (TextView) layout.findViewById(R.id.profilName2);
-	    text.setText("R¨¦mi");
-	    text = (TextView) layout.findViewById(R.id.profilName3);
-	    text.setText("R¨¦mi");
-	    text = (TextView) layout.findViewById(R.id.profilName4);
-	    text.setText("R¨¦mi");
-	    setContentView(layout);
+		setContentView(R.layout.activity_creer_partie);
 		// Show the Up button in the action bar.
 		setupActionBar();
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
-			identifiant = extras.getString("identifiant");
-		}
 	}
 
 	/**
@@ -51,7 +34,7 @@ public class RejoindrePartieActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.rejoindre_partie, menu);
+		getMenuInflater().inflate(R.menu.creer_partie, menu);
 		return true;
 	}
 
@@ -72,10 +55,5 @@ public class RejoindrePartieActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	
-	public void partie(View view) {
-		Intent intent = new Intent(this, PartieActivity.class);
-		intent.putExtra("identifiant", identifiant);
-		startActivity(intent);
-	}
+
 }

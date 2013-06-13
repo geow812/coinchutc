@@ -13,7 +13,7 @@ import jade.wrapper.ControllerException;
 
 import java.util.logging.Level;
 
-import utc.coinchutc.agent.ConnexionAgent;
+import utc.coinchutc.agent.CoincheClientAgent;
 import utc.coinchutc.agent.PartieAgent;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -516,12 +516,12 @@ public class PartieActivity extends Activity {
 	}
 
 	private void startAgent(final String identifiant, final RuntimeCallback<AgentController> agentStartupCallback) {
-		microRuntimeServiceBinder.startAgent(identifiant, ConnexionAgent.class.getName(),
+		microRuntimeServiceBinder.startAgent(identifiant, CoincheClientAgent.class.getName(),
 				new Object[] { getApplicationContext()},//TODO: passer les arguments ici
 				new RuntimeCallback<Void>() {
 			@Override
 			public void onSuccess(Void thisIsNull) {
-						logger.log(Level.INFO, "Successfully start of the " + ConnexionAgent.class.getName() + "...");
+				logger.log(Level.INFO, "Successfully start of the " + CoincheClientAgent.class.getName() + "...");
 				try {
 					agentStartupCallback.onSuccess(MicroRuntime.getAgent(identifiant));
 				} catch (ControllerException e) {
@@ -532,7 +532,7 @@ public class PartieActivity extends Activity {
 
 			@Override
 			public void onFailure(Throwable throwable) {
-						logger.log(Level.SEVERE, "Failed to start the " + ConnexionAgent.class.getName() + "...");
+				logger.log(Level.SEVERE, "Failed to start the " + CoincheClientAgent.class.getName() + "...");
 				agentStartupCallback.onFailure(throwable);
 			}
 		});
