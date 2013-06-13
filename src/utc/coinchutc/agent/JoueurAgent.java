@@ -1,7 +1,5 @@
 package utc.coinchutc.agent;
 
-import java.util.ArrayList;
-
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -11,11 +9,14 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
-import org.codehaus.jackson.map.ObjectMapper;
+
+import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JoueurAgent extends Agent implements JoueurInterface{
 	protected static final int ANNONCE_EVENT = 0;

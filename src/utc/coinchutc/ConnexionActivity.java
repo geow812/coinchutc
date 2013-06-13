@@ -13,7 +13,7 @@ import jade.wrapper.ControllerException;
 
 import java.util.logging.Level;
 
-import utc.coinchutc.agent.ConnexionAgent;
+import utc.coinchutc.agent.CoincheClientAgent;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -216,12 +216,12 @@ public class ConnexionActivity extends Activity {
 	}
 	
 	private void startAgent(final String identifiant, final String mdp, final String option, final RuntimeCallback<AgentController> agentStartupCallback) {
-		microRuntimeServiceBinder.startAgent("Conn-" + identifiant, ConnexionAgent.class.getName(),
+		microRuntimeServiceBinder.startAgent(identifiant, CoincheClientAgent.class.getName(),
 				new Object[] { getApplicationContext(), mdp, option },
 				new RuntimeCallback<Void>() {
 					@Override
 					public void onSuccess(Void thisIsNull) {
-						logger.log(Level.INFO, "Successfully start of the " + ConnexionAgent.class.getName() + "...");
+						logger.log(Level.INFO, "Successfully start of the " + CoincheClientAgent.class.getName() + "...");
 						try {
 							agentStartupCallback.onSuccess(MicroRuntime.getAgent(identifiant));
 						} catch (ControllerException e) {
@@ -232,7 +232,7 @@ public class ConnexionActivity extends Activity {
 
 					@Override
 					public void onFailure(Throwable throwable) {
-						logger.log(Level.SEVERE, "Failed to start the " + ConnexionAgent.class.getName() + "...");
+						logger.log(Level.SEVERE, "Failed to start the " + CoincheClientAgent.class.getName() + "...");
 						agentStartupCallback.onFailure(throwable);
 					}
 				});
@@ -241,7 +241,6 @@ public class ConnexionActivity extends Activity {
 	public void login() {
 		Intent intent = new Intent(this, MainActivity.class);
 		intent.putExtra("identifiant", identifiant);
-		Log.d("ConnexionActivity", identifiant + "login");
 		startActivity(intent);
 	}
 	
@@ -254,7 +253,6 @@ public class ConnexionActivity extends Activity {
 			if (action.equalsIgnoreCase("coinchutc.LOGIN_SUCCESS")) {
 				//ShowDialog("Login succeeded!");
 				login();
-				Log.d("ConnexionActivity", "Login succeeded!");
 			}
 			if (action.equalsIgnoreCase("coinchutc.LOGIN_FAIL")) {
 				ShowDialog("Login a ¨¦chou¨¦");

@@ -67,8 +67,9 @@
 	<string name="regle_deroulement">Le joueur qui est à droite du donneur commence par annoncer son contrat. Tout joueur peut annoncer un contrat ou passer la main, cela ne l\'empêchera pas s\'il a de nouveau la main d\'annoncer un contrat alors qu\'il a passé au tour précédent. On doit, pour pouvoir prendre un nouveau contrat, surenchérir par rapport au dernier contrat demandé. On ne peut pas demander la même couleur que ces adversaires. Les enchères s\'arrêtent dés que trois joueurs ont passé leurs tour à la suite. Alors la partie peut commencer ! C\'est le joueur à droite du donneur qui commence la partie en posant une carte.</string>
 	<string name="regle_points">Deux cas de figure se présentent: Si l\'équipe qui a demandé le contrat a réalisé celui-ci, alors elle gagne autant de points que le nombre spécifié dans le contrat auquel on ajoute le nombre de points effectivement réalisé (arrondi à la dizaine la plus proche). Si l\'équipe adverse n\'a remporté aucun pli, les preneurs marquent une prime supplémentaire de 90 points. L\'équipe adverse marque uniquement les points réalisés. Si par contre, le contrat n\'est pas réalisé, alors l\'équipe ne gagne aucun point et c\'est l\'équipe adverse qui cette fois remporte 160 points auxquels on ajoute les points du contrat demandé.</string>
 	<string name="regle_annonces">Les mêmes qu\'à la belote. Elles permettent de remporter son contrat.</string>
+	<string name="envoyer">Envoyer</string>
 	<string name="text_joueur">Joueurs Connectés</string>
     <string name="text_chat">Chat</string>
-    <string name="ready">Prêt</string>
-	<string name="envoyer">Envoyer</string>
+	<string name="ready">Pret</string>
+	
 </resources>

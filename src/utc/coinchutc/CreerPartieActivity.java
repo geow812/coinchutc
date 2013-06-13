@@ -3,17 +3,21 @@ package utc.coinchutc;
 import utc.coinchutc.R;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-public class JoueursConnectesActivity extends Activity {
+public class CreerPartieActivity extends Activity {
+	
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_joueurs_connectes);
+		setContentView(R.layout.activity_creer_partie);
 		// Show the Up button in the action bar.
 		setupActionBar();
 	}
@@ -30,7 +34,7 @@ public class JoueursConnectesActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.joueurs_connectes, menu);
+		getMenuInflater().inflate(R.menu.creer_partie, menu);
 		return true;
 	}
 
@@ -50,5 +54,6 @@ public class JoueursConnectesActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
 
 }
