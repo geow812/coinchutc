@@ -12,11 +12,11 @@ import jade.lang.acl.ACLMessage;
 
 import java.util.ArrayList;
 
+import org.codehaus.jackson.map.ObjectMapper;
+
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JoueurAgent extends Agent implements JoueurInterface{
 	protected static final int ANNONCE_EVENT = 0;

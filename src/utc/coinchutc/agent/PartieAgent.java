@@ -12,7 +12,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.codehaus.jackson.map.ObjectMapper;
 
 
 

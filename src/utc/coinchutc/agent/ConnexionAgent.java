@@ -19,7 +19,7 @@ import android.content.Intent;
 import android.util.Log;
 
 @SuppressWarnings("serial")
-public class ConnexionAgent extends Agent implements ConnextionInterface {
+public class ConnexionAgent extends Agent implements ConnexionInterface {
 	private Logger logger = Logger.getJADELogger(this.getClass().getName());
 	private AID[] players = new AID[3];
 	private Context context;
@@ -75,7 +75,7 @@ public class ConnexionAgent extends Agent implements ConnextionInterface {
 //		logger.log(Level.INFO, "Sending broadcast " + broadcast.getAction());
 //		context.sendBroadcast(broadcast);
 		
-		registerO2AInterface(ConnextionInterface.class, this);
+		registerO2AInterface(ConnexionInterface.class, this);
 	}
 	
 //	private void notifySpeakAction(String speaker, String sentence) {

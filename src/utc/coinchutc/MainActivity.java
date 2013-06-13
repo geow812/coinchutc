@@ -1,10 +1,11 @@
 package utc.coinchutc;
 
+import utc.coinchutc.agent.ConnexionInterface;
 import jade.core.MicroRuntime;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
-import utc.coinchutc.agent.CoincheClientInterface;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -19,7 +20,7 @@ public class MainActivity extends Activity {
 	public static final String CONNECTE = "connecte";
 	private boolean connecte = false;
 	private String identifiant = "";
-	private CoincheClientInterface coincheClientInterface = null;
+	private ConnexionInterface coincheClientInterface = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +90,7 @@ public class MainActivity extends Activity {
 			try {
 				AgentController ac = MicroRuntime.getAgent(identifiant);
 //				showAlertDialog(ac.getName(), false);
-				coincheClientInterface = ac.getO2AInterface(CoincheClientInterface.class);
+				coincheClientInterface = ac.getO2AInterface(ConnexionInterface.class);
 				if (coincheClientInterface != null)
 					coincheClientInterface.deconnexion();
 			} catch (StaleProxyException e) {
