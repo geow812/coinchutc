@@ -14,7 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:background="@drawable/forme_scores"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:visibility="gone" >
 
         <TextView
             android:id="@+id/annonceString"
@@ -103,6 +104,8 @@
             android:textSize="13sp" />
     </LinearLayout>
 
+    
+    
     <TextView
         android:id="@+id/joueur1"
         android:layout_width="wrap_content"
@@ -126,7 +129,8 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@id/joueur2"
         android:background="@drawable/forme_scores"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:visibility="gone" >
 
         <TextView
             android:id="@+id/annonceJ2String"
@@ -183,7 +187,8 @@
         android:layout_alignParentRight="true"
         android:layout_below="@id/joueur4"
         android:background="@drawable/forme_scores"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:visibility="gone" >
 
         <TextView
             android:id="@+id/annonceJ4String"
@@ -254,7 +259,7 @@
             android:layout_height="50dp"
             android:contentDescription="@string/carte"
             android:scaleType="fitXY"
-            android:src="@drawable/carreau11" />
+            android:src="@drawable/pique11" />
 
         <ImageView
             android:id="@+id/carte5"
@@ -262,7 +267,7 @@
             android:layout_height="50dp"
             android:contentDescription="@string/carte"
             android:scaleType="fitXY"
-            android:src="@drawable/carreau10" />
+            android:src="@drawable/pique9" />
 
         <ImageView
             android:id="@+id/carte6"
@@ -270,7 +275,7 @@
             android:layout_height="50dp"
             android:contentDescription="@string/carte"
             android:scaleType="fitXY"
-            android:src="@drawable/carreau9" />
+            android:src="@drawable/pique14" />
 
         <ImageView
             android:id="@+id/carte7"
@@ -278,7 +283,7 @@
             android:layout_height="50dp"
             android:contentDescription="@string/carte"
             android:scaleType="fitXY"
-            android:src="@drawable/carreau8" />
+            android:src="@drawable/coeur10" />
 
         <ImageView
             android:id="@+id/carte8"
@@ -286,7 +291,7 @@
             android:layout_height="50dp"
             android:contentDescription="@string/carte"
             android:scaleType="fitXY"
-            android:src="@drawable/carreau7" />
+            android:src="@drawable/coeur7" />
     </LinearLayout>
 
     <RelativeLayout
@@ -304,6 +309,27 @@
         android:layout_toRightOf="@id/joueur2"
         android:background="@drawable/forme_tapis"
         android:textColor="@color/black" >
+        
+        <!-- TODO: virer ce bouton -->
+        <Button
+        android:id="@+id/commencerSimul"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/commencer"
+        android:onClick="commencerSimulation"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/black" />
+        <Button
+        android:id="@+id/continuerSimul"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/continuer"
+        android:onClick="continuerSimulation"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/deposer"
@@ -324,8 +350,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="5dp"
             android:contentDescription="@string/carte"
-            android:scaleType="fitXY"
-            android:src="@drawable/trefle10" />
+            android:scaleType="fitXY" />
 
         <ImageView
             android:id="@+id/cartejouee2"
@@ -335,8 +360,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
             android:contentDescription="@string/carte"
-            android:scaleType="fitXY"
-            android:src="@drawable/pique10" />
+            android:scaleType="fitXY" />
 
         <ImageView
             android:id="@+id/cartejouee3"
@@ -346,8 +370,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
             android:contentDescription="@string/carte"
-            android:scaleType="fitXY"
-            android:src="@drawable/pique10" />
+            android:scaleType="fitXY" />
 
         <ImageView
             android:id="@+id/cartejouee4"
@@ -357,8 +380,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
             android:contentDescription="@string/carte"
-            android:scaleType="fitXY"
-            android:src="@drawable/pique10" />
+            android:scaleType="fitXY" />
     </RelativeLayout>
 
     <!--
@@ -373,7 +395,8 @@
         android:layout_below="@id/joueur3"
         android:layout_centerHorizontal="true"
         android:background="@drawable/forme_scores"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:visibility="gone" >
 
         <TextView
             android:id="@+id/annonceJ3String"
@@ -396,6 +419,47 @@
             android:textSize="13sp" />
 
         <TextView
+            android:id="@+id/annonceJ3Points"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="3dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:text="@string/pique"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/annonceLayoutJoueur1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/joueur1"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/forme_scores"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/annonceJ1String"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="3dp"
+            android:text="@string/annonceS"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/annonceJ1Couleur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="3dp"
+            android:text="@string/pt130"
+            android:textSize="13sp" />
+
+        <TextView
             android:id="@+id/annonceJ1Points"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -406,4 +470,56 @@
             android:textSize="13sp" />
     </LinearLayout>
 
+    <Button
+        android:id="@+id/plis"
+        android:layout_below="@+id/annonceLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/plisS"
+        android:onClick="afficherplis"
+        android:textColor="@color/black"
+        android:visibility="gone" />
+    
+     <LinearLayout
+        android:id="@+id/cartesPlis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/plis"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/cartePlis1"
+            android:layout_width="33dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/carte"
+            android:scaleType="fitXY"
+            android:src="@drawable/carreau11" />
+
+        <ImageView
+            android:id="@+id/cartePlis2"
+            android:layout_width="33dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/carte"
+            android:scaleType="fitXY"
+            android:src="@drawable/carreau8" />
+
+        <ImageView
+            android:id="@+id/cartePlis3"
+            android:layout_width="33dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/carte"
+            android:scaleType="fitXY"
+            android:src="@drawable/carreau14" />
+
+        <ImageView
+            android:id="@+id/cartePlis4"
+            android:layout_width="33dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/carte"
+            android:scaleType="fitXY"
+            android:src="@drawable/carreau9" />
+
+    </LinearLayout>
+    
 </RelativeLayout>

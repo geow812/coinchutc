@@ -50,6 +50,9 @@
 	<string name="annonceS">ANNONCE</string>
 	<string name="pt130">130</string>
 	<string name="pique">Pique</string>
+	<string name="commencer">COMMENCER</string>
+	<string name="continuer">CONTINUER</string>
+	<string name="plisS">PLIS</string>
 	<string name="scoresS">SCORES</string>
 	<string name="scoresN">Nous :</string>
 	<string name="pointsN">0 pts</string>
