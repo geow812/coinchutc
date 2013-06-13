@@ -2,6 +2,8 @@ package utc.coinchutc;
 
 import jade.core.MicroRuntime;
 import jade.wrapper.AgentController;
+import jade.wrapper.ControllerException;
+import jade.wrapper.StaleProxyException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -159,16 +161,41 @@ public class RejoindrePartieActivity extends Activity {
 			Log.d("RejoindrePartieActivity", "MicroRuntime Running");
 			try {
 				AgentController ac = MicroRuntime.getAgent(identifiant);
-				joueurInterface = ac.getO2AInterface(JoueurAgent.class);
-				joueurInterface.sendMessage(msg);
-				
-			} catch (Exception e) {
-				Log.d("RejoindrePartieActivity", "Error getting Agent");
-			} 
+				if (ac == null)
+					Log.d("RejoindrePartieActivity", "Error getting controlleur");
+				joueurInterface = ac.getO2AInterface(JoueurInterface.class);
+				if (joueurInterface != null) {
+					joueurInterface.sendMessage(msg);
+				}
+				else {
+					Log.d("RejoindrePartieActivity", "Error getting interface");
+				}
+			} catch (StaleProxyException e) {
+				showAlertDialog(getString(R.string.msg_interface_exc), true);
+			} catch (ControllerException e) {
+				showAlertDialog(getString(R.string.msg_controller_exc), true);
+			}
 		}
 		else {
 			Log.d("RejoindrePartieActivity", "MicroRuntime stopped");
 		}
+	}
+	
+	private void showAlertDialog(String message, final boolean fatal) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(
+				RejoindrePartieActivity.this);
+		builder.setMessage(message)
+				.setCancelable(false)
+				.setPositiveButton("Ok",
+						new DialogInterface.OnClickListener() {
+							public void onClick(
+									DialogInterface dialog, int id) {
+								dialog.cancel();
+								if(fatal) finish();
+							}
+						});
+		AlertDialog alert = builder.create();
+		alert.show();		
 	}
 
 	private class MyReceiver extends BroadcastReceiver {

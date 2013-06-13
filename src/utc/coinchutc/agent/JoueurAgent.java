@@ -82,8 +82,7 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 		comportementSequentiel.addSubBehaviour(jouerTour);
 		
 		addBehaviour(comportementSequentiel);
-		
-
+		registerO2AInterface(JoueurInterface.class, this);
 	}
 	
 	private void setReceiver() {
