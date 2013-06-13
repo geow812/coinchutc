@@ -1,21 +1,48 @@
 package utc.coinchutc;
 
-import utc.coinchutc.R;
+import jade.util.Logger;
+
+import java.util.logging.Level;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 public class JoueursConnectesActivity extends Activity {
-
+	
+	private MyReceiver myReceiver = new MyReceiver();
+	private Logger logger = Logger.getJADELogger(this.getClass().getName());
+	private String[] joueurs = new String[]{};
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_joueurs_connectes);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		Log.d("JoueursConnecteActivity", "Enter Activity!");
+		final ListView listview = (ListView) findViewById(R.id.listJoueurs);
+		
+		IntentFilter loginFilter = new IntentFilter();
+		loginFilter.addAction("chat.REFRESH_PARTICIPANTS");
+		registerReceiver(myReceiver, loginFilter);
+
+		//Log.d("JoueursConnecteActivity", "Test 1!");
+		if (joueurs.length == 0) {
+			String[] emptyMsg = {"Il n'y a pas de joueurs"};
+			listview.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, emptyMsg));
+		}
+		else {
+			listview.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, joueurs));
+		}
 	}
 
 	/**
@@ -49,6 +76,21 @@ public class JoueursConnectesActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	private class MyReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			logger.log(Level.INFO, "Received intent " + action);
+			if (action.equalsIgnoreCase("chat.REFRESH_PARTICIPANTS")) {
+				Bundle extras = intent.getExtras();
+				if (extras != null) {
+					joueurs = extras.getStringArray("players");
+				}
+			}
+		}
 	}
 
 }

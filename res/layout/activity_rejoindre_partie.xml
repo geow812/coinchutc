@@ -1,133 +1,74 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".RejoindrePartieActivity" >
+    android:layout_height="match_parent" >
 
-    <!--  <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />-->
+        android:orientation="vertical" >
 
-    <!--  <Button
-        android:id="@+id/partieBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="35dp"
-        android:onClick="partie"
-        android:text="@string/partie" />-->
-    
-    <TextView
-        android:id="@+id/profilName1"
-  		android:layout_width="wrap_content"
-   		android:layout_height="wrap_content"
-    	android:layout_alignParentTop="true"
-    	android:layout_alignParentLeft="true" />
-   	<ImageView
-        android:id="@+id/profilImage1"
-        android:layout_width="wrap_content"
-        android:contentDescription="@string/ImageProfil"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/profilName1"
-        android:src="@drawable/remi" />
-    	
- 	<TextView
- 	    android:id="@+id/profilName2"
-    	android:layout_width="wrap_content"
-    	android:layout_height="wrap_content"
-    	android:layout_alignParentTop="true"
-    	android:layout_alignParentRight="true" />   
-    	
- 	<ImageView
-        android:id="@+id/profilImage2"
-        android:layout_width="wrap_content"
-        android:contentDescription="@string/ImageProfil"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/profilName2"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/remi" />
- 	 <ImageView
-        android:id="@+id/profilImage3"
-        android:layout_width="wrap_content"
-        android:contentDescription="@string/ImageProfil"
+        <TextView
+            android:id="@+id/text_joueurs_connecter"
+            style="@style/Titre"
+            android:text="@string/text_joueur" />
+
+        <ListView
+            android:id="@+id/list_connected_players"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.55" >
+        </ListView>
+
+        <TextView
+            android:id="@+id/text_chat"
+            style="@style/Titre"
+            android:text="@string/text_chat" />
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <TextView
+                android:id="@+id/textOutput"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="5dp"
+                android:text="@string/hello_world" />
+        </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/chatViewLayout"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true" 
-        android:src="@drawable/remi" />
-  	<TextView
-  	    android:id="@+id/profilName3"
-    	android:layout_width="wrap_content"
-    	android:layout_height="wrap_content"
-    	android:layout_alignParentLeft="true" 
-    	android:layout_above="@id/profilImage3" />
-  	<ImageView
-        android:id="@+id/profilImage4"
-        android:layout_width="wrap_content"
-        android:contentDescription="@string/ImageProfil"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true" 
-        android:src="@drawable/remi" />
-  	<TextView
-  	    android:id="@+id/profilName4"
-    	android:layout_width="wrap_content"
-    	android:layout_height="wrap_content"
-    	android:layout_alignParentRight="true" 
-    	android:layout_above="@id/profilImage4" />
-  	
-  	
-  	<RelativeLayout
-  	    android:id="@+id/chatViewLayout"
-    	android:layout_width="fill_parent"
-    	android:layout_height="fill_parent"
-    	android:textColor="@color/black" 
-    	android:layout_centerInParent="true"
-    	android:background="@color/greenLight"
-    	android:layout_marginRight="60dp"
-    	android:layout_marginLeft="60dp" >
-    	
-	   	<TextView
-	  	    android:id="@+id/chatTextView"
-	    	android:layout_width="wrap_content"
-	    	android:layout_height="wrap_content"
-	    	android:textColor="@color/black"
-	    	android:text="@string/hello_world" /> 	
+        android:layout_centerInParent="true"
+        android:baselineAligned="true"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp" >
 
-	    
-	    <Button
-        	android:id="@+id/sendMessageButton"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:text="@string/Send" 
-        	android:textColor="@color/black"
-        	android:layout_alignParentRight="true"
-        	android:layout_alignParentBottom="true" />  
-        	
-	    <Button
-        	android:id="@+id/demoPartie"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:text="@string/demo" 
-        	android:textColor="@color/black"
-        	android:onClick="partie"
-        	android:layout_alignParentLeft="true"
-        	android:layout_alignParentBottom="true" />  
-	    
-        <EditText android:id="@+id/messageToSend"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:textColor="@color/black" 
-        	android:layout_above="@id/sendMessageButton"
-        	android:hint="@string/messageToSendHint" /> 
-	   
-    
-    </RelativeLayout>
+        <EditText
+            android:id="@+id/textInput"
+            android:layout_width="0dip"
+            android:layout_height="45dp"
+            android:layout_weight="1" >
+
+            <requestFocus>
+            </requestFocus>
+        </EditText>
+
+        <Button
+            android:id="@+id/btnSend"
+            android:layout_width="125dp"
+            android:layout_height="45dp"
+            android:text="Envoyer" >
+        </Button>
+    </LinearLayout>
 
 </RelativeLayout>
