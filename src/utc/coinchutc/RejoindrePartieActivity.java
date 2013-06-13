@@ -1,14 +1,23 @@
 package utc.coinchutc;
 
+import jade.core.MicroRuntime;
+import jade.wrapper.AgentController;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
 
+import utc.coinchutc.agent.JoueurAgent;
+import utc.coinchutc.agent.JoueurInterface;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,18 +26,21 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class RejoindrePartieActivity extends Activity {
-
+	
+	private String identifiant = "";
+	private JoueurInterface joueurInterface = null;
 
 	//ArrayList that will hold the original Data
-	ArrayList<HashMap<String, Object>> players;
-	LayoutInflater inflater;
-	ListView list_players;
+	private ArrayList<HashMap<String, Object>> players;
+	private LayoutInflater inflater;
+	private ListView list_players;
+	private MyReceiver myReceiver = new MyReceiver();
 
 	protected static String names[];
 	@Override
@@ -36,7 +48,18 @@ public class RejoindrePartieActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rejoindre_partie);
 		list_players = (ListView) findViewById(R.id.list_connected_players);
-
+		
+		// get the identifiant from the intent
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			Log.d("RejoindrePartieActivity", "Receive id " + identifiant);
+			identifiant = extras.getString("identifiant");
+		}
+		
+		// get the broadcast for chat
+		IntentFilter loginFilter = new IntentFilter();
+		loginFilter.addAction("coinchutc.REFRESH_CHAT");
+		registerReceiver(myReceiver, loginFilter);
 
 		//get the LayoutInflater for inflating the customomView
 		//this will be used in the custom adapter
@@ -104,12 +127,76 @@ public class RejoindrePartieActivity extends Activity {
 
 		//finally,set the adapter to the default ListView
 		list_players.setAdapter(adapter);
+		
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy); 
 
-
-
+		// create the agent of type JoueurAgent
+		if (MicroRuntime.isRunning()) {
+			Log.d("RejoindrePartieActivity", "MicroRuntime Running");
+			try {
+				MicroRuntime.startAgent(identifiant, JoueurAgent.class.getName(), new Object[] { getApplicationContext() });
+			} catch (Exception e) {
+				Log.d("RejoindrePartieActivity", "Error creating Agent");
+			} 
+		}
+		else {
+			Log.d("RejoindrePartieActivity", "MicroRuntime stopped");
+		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		unregisterReceiver(myReceiver);
 	}
 
+	public void envoyer(View view) {
+		TextView chatField = (TextView) findViewById(R.id.textInput);
+		String msg = chatField.getText().toString();
+		Log.d("RejoindrePartieActivity", "Message to send: " + msg);
+		if (MicroRuntime.isRunning()) {
+			Log.d("RejoindrePartieActivity", "MicroRuntime Running");
+			try {
+				AgentController ac = MicroRuntime.getAgent(identifiant);
+				joueurInterface = ac.getO2AInterface(JoueurAgent.class);
+				joueurInterface.sendMessage(msg);
+				
+			} catch (Exception e) {
+				Log.d("RejoindrePartieActivity", "Error getting Agent");
+			} 
+		}
+		else {
+			Log.d("RejoindrePartieActivity", "MicroRuntime stopped");
+		}
+	}
 
+	private class MyReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			if (action.equalsIgnoreCase("coinchutc.REFRESH_CHAT")) {
+				//ShowDialog("Login succeeded!");
+				Bundle extras = intent.getExtras();
+				if (extras != null) {
+					String sender = extras.getString("sender");
+					String message = extras.getString("chat");
+					
+					refreshChat(sender, message);
+					Log.d("RejoindrePartieActivity", "Chat Refreshed");
+				}
+
+			}
+		}
+
+		private void refreshChat(String sender, String message) {
+			// TODO Auto-generated method stub
+			TextView chatField = (TextView) findViewById(R.id.textOutput);
+			//identifiant = nameField.getText().toString();
+			chatField.append("\n" + sender + ": " + message);
+		}
+	}
 
 	//define your custom adapter
 	private class CustomAdapter extends ArrayAdapter<HashMap<String, Object>>
@@ -193,6 +280,5 @@ public class RejoindrePartieActivity extends Activity {
 			//return the view to be displayed
 			return convertView;
 		}
-
 	}
 }

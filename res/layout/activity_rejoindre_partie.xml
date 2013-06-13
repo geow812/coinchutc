@@ -67,7 +67,8 @@
             android:id="@+id/btnSend"
             android:layout_width="125dp"
             android:layout_height="45dp"
-            android:text="Envoyer" >
+            android:text="@string/envoyer"
+            android:onClick="envoyer" >
         </Button>
     </LinearLayout>
 
