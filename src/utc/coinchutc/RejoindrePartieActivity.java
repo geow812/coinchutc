@@ -1,13 +1,13 @@
 package utc.coinchutc;
 
 import jade.core.MicroRuntime;
+import jade.core.NotFoundException;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
 
 import utc.coinchutc.agent.JoueurAgent;
 import utc.coinchutc.agent.JoueurInterface;
@@ -28,13 +28,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 public class RejoindrePartieActivity extends Activity {
-	
+
 	private String identifiant = "";
 	private JoueurInterface joueurInterface = null;
 
@@ -44,20 +43,27 @@ public class RejoindrePartieActivity extends Activity {
 	private ListView list_players;
 	private MyReceiver myReceiver = new MyReceiver();
 
+	public void demoPartie(View view) {
+		Intent intent = new Intent(this, PartieActivity.class);
+		intent.putExtra("identifiant", identifiant);
+		startActivity(intent);
+
+	}
+
 	protected static String names[];
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rejoindre_partie);
 		list_players = (ListView) findViewById(R.id.list_connected_players);
-		
+
 		// get the identifiant from the intent
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			Log.d("RejoindrePartieActivity", "Receive id " + identifiant);
 			identifiant = extras.getString("identifiant");
 		}
-		
+
 		// get the broadcast for chat
 		IntentFilter loginFilter = new IntentFilter();
 		loginFilter.addAction("coinchutc.REFRESH_CHAT");
@@ -118,7 +124,7 @@ public class RejoindrePartieActivity extends Activity {
 				.setCancelable(false)
 				.setPositiveButton("Fermer", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
-						
+
 					}
 				});
 
@@ -129,7 +135,7 @@ public class RejoindrePartieActivity extends Activity {
 
 		//finally,set the adapter to the default ListView
 		list_players.setAdapter(adapter);
-		
+
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy); 
 
@@ -146,29 +152,40 @@ public class RejoindrePartieActivity extends Activity {
 			Log.d("RejoindrePartieActivity", "MicroRuntime stopped");
 		}
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		unregisterReceiver(myReceiver);
+		
+		if (MicroRuntime.isRunning()) {
+			try {
+				MicroRuntime.killAgent(identifiant);
+			} catch (NotFoundException e) {
+				Log.e("RejoindrePartieActivity", "Agent Not Found!");
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void envoyer(View view) {
-		TextView chatField = (TextView) findViewById(R.id.textInput);
-		String msg = chatField.getText().toString();
+		TextView inputField = (TextView) findViewById(R.id.textInput);
+		String msg = inputField.getText().toString();
+		TextView outputField = (TextView) findViewById(R.id.textOutput);
+		outputField.append("\nMoi: " + msg);
 		Log.d("RejoindrePartieActivity", "Message to send: " + msg);
 		if (MicroRuntime.isRunning()) {
 			Log.d("RejoindrePartieActivity", "MicroRuntime Running");
 			try {
 				AgentController ac = MicroRuntime.getAgent(identifiant);
 				if (ac == null)
-					Log.d("RejoindrePartieActivity", "Error getting controlleur");
+					Log.e("RejoindrePartieActivity", "Error getting controlleur");
 				joueurInterface = ac.getO2AInterface(JoueurInterface.class);
 				if (joueurInterface != null) {
 					joueurInterface.sendMessage(msg);
 				}
 				else {
-					Log.d("RejoindrePartieActivity", "Error getting interface");
+					Log.e("RejoindrePartieActivity", "Error getting interface");
 				}
 			} catch (StaleProxyException e) {
 				showAlertDialog(getString(R.string.msg_interface_exc), true);
@@ -177,23 +194,23 @@ public class RejoindrePartieActivity extends Activity {
 			}
 		}
 		else {
-			Log.d("RejoindrePartieActivity", "MicroRuntime stopped");
+			Log.e("RejoindrePartieActivity", "MicroRuntime stopped");
 		}
 	}
-	
+
 	private void showAlertDialog(String message, final boolean fatal) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(
 				RejoindrePartieActivity.this);
 		builder.setMessage(message)
-				.setCancelable(false)
-				.setPositiveButton("Ok",
-						new DialogInterface.OnClickListener() {
-							public void onClick(
-									DialogInterface dialog, int id) {
-								dialog.cancel();
-								if(fatal) finish();
-							}
-						});
+		.setCancelable(false)
+		.setPositiveButton("Ok",
+				new DialogInterface.OnClickListener() {
+			public void onClick(
+					DialogInterface dialog, int id) {
+				dialog.cancel();
+				if(fatal) finish();
+			}
+		});
 		AlertDialog alert = builder.create();
 		alert.show();		
 	}
@@ -209,7 +226,7 @@ public class RejoindrePartieActivity extends Activity {
 				if (extras != null) {
 					String sender = extras.getString("sender");
 					String message = extras.getString("chat");
-					
+
 					refreshChat(sender, message);
 					Log.d("RejoindrePartieActivity", "Chat Refreshed");
 				}
@@ -218,9 +235,7 @@ public class RejoindrePartieActivity extends Activity {
 		}
 
 		private void refreshChat(String sender, String message) {
-			// TODO Auto-generated method stub
 			TextView chatField = (TextView) findViewById(R.id.textOutput);
-			//identifiant = nameField.getText().toString();
 			chatField.append("\n" + sender + ": " + message);
 		}
 	}

@@ -216,7 +216,7 @@ public class ConnexionActivity extends Activity {
 	}
 	
 	private void startAgent(final String identifiant, final String mdp, final String option, final RuntimeCallback<AgentController> agentStartupCallback) {
-		microRuntimeServiceBinder.startAgent(identifiant, ConnexionAgent.class.getName(),
+		microRuntimeServiceBinder.startAgent("Conn-" + identifiant, ConnexionAgent.class.getName(),
 				new Object[] { getApplicationContext(), mdp, option },
 				new RuntimeCallback<Void>() {
 					@Override
@@ -241,6 +241,7 @@ public class ConnexionActivity extends Activity {
 	public void login() {
 		Intent intent = new Intent(this, MainActivity.class);
 		intent.putExtra("identifiant", identifiant);
+		Log.d("ConnexionActivity", identifiant + "login");
 		startActivity(intent);
 	}
 	
@@ -253,6 +254,7 @@ public class ConnexionActivity extends Activity {
 			if (action.equalsIgnoreCase("coinchutc.LOGIN_SUCCESS")) {
 				//ShowDialog("Login succeeded!");
 				login();
+				Log.d("ConnexionActivity", "Login succeeded!");
 			}
 			if (action.equalsIgnoreCase("coinchutc.LOGIN_FAIL")) {
 				ShowDialog("Login a ¨¦chou¨¦");

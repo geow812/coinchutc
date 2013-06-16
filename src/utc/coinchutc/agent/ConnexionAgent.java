@@ -33,6 +33,7 @@ public class ConnexionAgent extends Agent implements ConnexionInterface {
 	private static final String LOGINFAIL = "__login_fail__";
 	
 	protected void setup() {
+		
 		Object[] args = getArguments();
 		if (args != null && args.length > 0) {
 			if (args[0] instanceof Context) {
@@ -58,7 +59,7 @@ public class ConnexionAgent extends Agent implements ConnexionInterface {
 		dfd.addServices(sd);
 		try {
 			DFService.register(this, dfd);
-			System.out.println(" "+getAID().getName()+" is registered as '"+sd.getType()+"'");
+			Log.d("ConnexionAgent", " "+getAID().getName()+" is registered as '"+sd.getType()+"'");
 		}
 		catch (FIPAException fe) {
 			fe.printStackTrace();

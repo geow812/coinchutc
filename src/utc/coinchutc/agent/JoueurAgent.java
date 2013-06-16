@@ -9,6 +9,7 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 
 import java.util.ArrayList;
 
@@ -23,6 +24,7 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 	protected static final int JEU_EVENT = 1;
 	protected static final int REJOINDRE_EVENT = 2;
 	protected static final int CHAT_EVENT = 3;
+	private static final String CHAT_ID = "__chat__";
 	private Carte[] main;
 	private String main2;
 	private String nom;
@@ -42,7 +44,6 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 				context = (Context) args[0];
 			}
 			if (args.length > 1) {
-//				System.out.println("Test");
 				identifiant = (String) args[1];
 			}
 		}
@@ -70,9 +71,9 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 		comportementSequentiel.addSubBehaviour(new RecupBehaviour());
 		comportementSequentiel.addSubBehaviour(new AnnonceBehaviour());
 		
-		SequentialBehaviour jouerTour = new SequentialBehaviour();
+		/*SequentialBehaviour jouerTour = new SequentialBehaviour();
 		jouerTour.addSubBehaviour(new JouerBehaviour());
-		/*jouerTour.addSubBehaviour(new JouerBehaviour());
+		jouerTour.addSubBehaviour(new JouerBehaviour());
 		jouerTour.addSubBehaviour(new JouerBehaviour());
 		jouerTour.addSubBehaviour(new JouerBehaviour());
 		jouerTour.addSubBehaviour(new JouerBehaviour());
@@ -80,7 +81,7 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 		jouerTour.addSubBehaviour(new JouerBehaviour());
 		jouerTour.addSubBehaviour(new JouerBehaviour());*/
 		
-		comportementSequentiel.addSubBehaviour(jouerTour);
+		//comportementSequentiel.addSubBehaviour(jouerTour);
 		
 		addBehaviour(comportementSequentiel);
 		registerO2AInterface(JoueurInterface.class, this);
@@ -101,11 +102,12 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 					{
 						receivers[ind] = result[i].getName();
 						ind++;
+						Log.d("JoueurAgent", "Add receiver " + result[i].getName());
 					}
 				}
 
 			}
-			else System.out.println("Erreur lors de la creation des receivers");
+			else Log.d("JoueurAgent", "Erreur lors de la creation des receivers");
 		}
 		catch(FIPAException fe) {  }
 		ind=0;
@@ -116,9 +118,11 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 		private boolean fini = false;
 		@Override
 		public void action() {
-			ACLMessage msg = myAgent.receive();
+			MessageTemplate chatTemplate = MessageTemplate.MatchConversationId(CHAT_ID);
+
+			ACLMessage msg = myAgent.receive(chatTemplate);
 			
-			if (msg!=null && msg.getPerformative()==ACLMessage.INFORM)
+			if (msg!=null && msg.getPerformative() == ACLMessage.INFORM)
 			{
 				//changes.firePropertyChange("chat", msg.getSender().getLocalName(), msg.getContent());
 				Intent broadcast = new Intent();
@@ -150,7 +154,7 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 			ACLMessage msg = myAgent.receive();
 			if(msg!=null && msg.getPerformative()==ACLMessage.INFORM)
 			{
-				System.out.println("message reçu : "+msg.getContent()+" par : "+myAgent.getLocalName());
+				Log.d("JoueurAgent", "message reçu : "+msg.getContent()+" par : "+myAgent.getLocalName());
 				//main2 = msg.getContent();
 				String s = msg.getContent(); // chaine JSON
 				ObjectMapper mapper = new ObjectMapper();
@@ -329,7 +333,6 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 		msg.addReceiver(receivers[1]);
 		msg.addReceiver(receivers[2]);
 		send(msg);
-		
 	}
 
 

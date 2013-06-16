@@ -8,37 +8,51 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/text_joueurs_connecter"
-            style="@style/Titre"
-            android:text="@string/text_joueur" />
-
-        <ListView
-            android:id="@+id/list_connected_players"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="0.55" >
-        </ListView>
-
-        <TextView
-            android:id="@+id/text_chat"
-            style="@style/Titre"
-            android:text="@string/text_chat" />
-
-        <ScrollView
+        <Button
+            android:id="@+id/simulation"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" >
+            android:onClick="demoPartie"
+            android:text="@string/demo"
+            android:textColor="@color/white" />
 
             <TextView
-                android:id="@+id/textOutput"
+                android:id="@+id/text_joueurs_connecter"
+                style="@style/Titre"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/text_joueur" />
+
+            <ListView
+                android:id="@+id/list_connected_players"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.55" >
+            </ListView>
+
+            <TextView
+                android:id="@+id/text_chat"
+                style="@style/Titre"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/text_chat" />
+
+            <ScrollView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:paddingTop="5dp"
-                android:text="@string/hello_world" />
-        </ScrollView>
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/textOutput"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="5dp"
+                    android:text="" />
+            </ScrollView>
+
+
     </LinearLayout>
 
     <LinearLayout
@@ -57,7 +71,8 @@
             android:id="@+id/textInput"
             android:layout_width="0dip"
             android:layout_height="45dp"
-            android:layout_weight="1" >
+            android:layout_weight="1"
+            android:inputType="text">
 
             <requestFocus>
             </requestFocus>
@@ -67,8 +82,8 @@
             android:id="@+id/btnSend"
             android:layout_width="125dp"
             android:layout_height="45dp"
-            android:text="@string/envoyer"
-            android:onClick="envoyer" >
+            android:onClick="envoyer"
+            android:text="@string/envoyer" >
         </Button>
     </LinearLayout>
 
