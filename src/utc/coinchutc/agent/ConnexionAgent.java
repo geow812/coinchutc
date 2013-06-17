@@ -66,27 +66,9 @@ public class ConnexionAgent extends Agent implements ConnexionInterface {
 		}
 
 		addBehaviour(new ConnexionBehaviour(this));
-
-		// Initialize the message used to convey spoken sentences
-//		spokenMsg = new ACLMessage(ACLMessage.INFORM);
-//		spokenMsg.setConversationId(CHAT_ID);
-		
-//		Intent broadcast = new Intent();
-//		broadcast.setAction("jade.demo.chat.SHOW_CHAT");
-//		logger.log(Level.INFO, "Sending broadcast " + broadcast.getAction());
-//		context.sendBroadcast(broadcast);
 		
 		registerO2AInterface(ConnexionInterface.class, this);
 	}
-	
-//	private void notifySpeakAction(String speaker, String sentence) {
-//		// TODO: implement methods when a player acts
-//		Intent broadcast = new Intent();
-//		broadcast.setAction("jade.demo.chat.REFRESH_CHAT");
-//		broadcast.putExtra("sentence", speaker + ": " + sentence + "\n");
-//		logger.log(Level.INFO, "Sending broadcast " + broadcast.getAction());
-//		context.sendBroadcast(broadcast);
-//	}
 	
 	private void notifyPlayersChanged() {
 		Intent broadcast = new Intent();
@@ -156,6 +138,7 @@ public class ConnexionAgent extends Agent implements ConnexionInterface {
 					if (answer.equalsIgnoreCase(LOGINSUCCESS)) {
 						Log.d("ClientAgent", myAgent.getLocalName() + " receives login success message");
 						notifyLoginSuccess();
+						notifyPlayersChanged();
 					}
 					else if (answer.equalsIgnoreCase(LOGINFAIL)) {
 						notifyLoginFail();
@@ -170,34 +153,7 @@ public class ConnexionAgent extends Agent implements ConnexionInterface {
 				block();
 			}
 		}
-	} // END of inner class PlayersManager
-	
-//	public class ChatBehaviour extends Behaviour{
-//		private boolean fini = false;
-//		@Override
-//		public void action() {
-//			// TODO Auto-generated method stub
-//			ACLMessage msg = myAgent.receive();
-//			
-//			if (msg!=null && msg.getPerformative()==ACLMessage.INFORM)
-//			{
-//				//changes.firePropertyChange("chat", msg.getSender().getLocalName(), msg.getContent());
-//				//TODO:send message to RejoindrePartieActivity to show
-//				String who = "", what = "";
-//				notifySpeakAction(who, what);
-//			}
-//			else if (msg!=null && msg.getPerformative()==ACLMessage.CONFIRM)
-//			{
-//				fini=true;
-//			}
-//		}
-//		@Override
-//		public boolean done() {
-//			// TODO Auto-generated method stub
-//			return fini;
-//		}
-//		
-//	}
+	} // END of inner class ConnexionBehaviour
 
 	@Override
 	public String[] getPlayersNames() {

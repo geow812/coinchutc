@@ -3,6 +3,8 @@ package utc.coinchutc.agent;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -19,12 +21,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+@SuppressWarnings("serial")
 public class JoueurAgent extends Agent implements JoueurInterface{
 	protected static final int ANNONCE_EVENT = 0;
 	protected static final int JEU_EVENT = 1;
 	protected static final int REJOINDRE_EVENT = 2;
 	protected static final int CHAT_EVENT = 3;
 	private static final String CHAT_ID = "__chat__";
+	private static final String NOTIF = "__notif__";
 	private Carte[] main;
 	private String main2;
 	private String nom;
@@ -33,7 +37,8 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 	private Context context;
 
 	private AID[] receivers = new AID[3];
-	private boolean rejoindre=false;
+	private String[] joueurs = new String[3];
+	private boolean rejoindre = false;
 	
 	protected void setup()
 	{
@@ -49,8 +54,6 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 		}
 		
 		main = new Carte[8];
-
-		System.out.println("Hello " + this.getAID());
 		
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
@@ -65,6 +68,10 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 		catch (FIPAException fe) {
 			fe.printStackTrace();
 		}
+		
+		// notify others players especially android players
+		addBehaviour(new NotifyOthersBehaviour());
+		addBehaviour(new ReceiveNotifBehaviour());
 		
 		SequentialBehaviour comportementSequentiel = new SequentialBehaviour();
 		comportementSequentiel.addSubBehaviour(new ChatBehaviour());
@@ -85,6 +92,15 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 		
 		addBehaviour(comportementSequentiel);
 		registerO2AInterface(JoueurInterface.class, this);
+		
+		// initialiser la liste de joueurs connectes
+		setReceiver();
+		Intent broadcast = new Intent();
+		broadcast.setAction("coinchutc.JOUEURS_CONNECTES");
+		broadcast.putExtra("moi", identifiant);
+		broadcast.putExtra("joueurs", joueurs);
+		Log.d("JoueurAgent", "Sending broadcast " + broadcast.getAction());
+		context.sendBroadcast(broadcast);
 	}
 	
 	private void setReceiver() {
@@ -101,6 +117,7 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 					if (!result[i].getName().equals(this.getAID()))
 					{
 						receivers[ind] = result[i].getName();
+						joueurs[ind] = result[i].getName().getLocalName();
 						ind++;
 						Log.d("JoueurAgent", "Add receiver " + result[i].getName());
 					}
@@ -112,8 +129,39 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 		catch(FIPAException fe) {  }
 		ind=0;
 	}
+	
+	public class NotifyOthersBehaviour extends OneShotBehaviour {
 
-	@SuppressWarnings("serial")
+		@Override
+		public void action() {
+			ACLMessage notif = new ACLMessage(ACLMessage.INFORM);
+			notif.setConversationId(NOTIF);
+			notif.addReceiver(receivers[0]);
+			notif.addReceiver(receivers[1]);
+			notif.addReceiver(receivers[2]);
+			myAgent.send(notif);
+		}
+	}
+	
+	public class ReceiveNotifBehaviour extends CyclicBehaviour {
+
+		@Override
+		public void action() {
+			MessageTemplate rcvNotifTemplate = MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.INFORM),
+					MessageTemplate.MatchConversationId(NOTIF));
+			ACLMessage notif = myAgent.receive(rcvNotifTemplate);
+			if (notif != null) {
+				Intent broadcast = new Intent();
+				broadcast.setAction("coinchutc.REFRESH_JOUEURS");
+				broadcast.putExtra("sender", notif.getSender().getLocalName());
+				Log.d("JoueurAgent", "Sending broadcast " + broadcast.getAction());
+				context.sendBroadcast(broadcast);
+			}
+			else
+				block();
+		}
+	}
+
 	public class ChatBehaviour extends Behaviour{
 		private boolean fini = false;
 		@Override
@@ -145,7 +193,6 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 		
 	}
 	
-	@SuppressWarnings("serial")
 	public class RecupBehaviour extends Behaviour{
 		private boolean fini = false;
 		private int ind=0;
@@ -223,7 +270,7 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 			// TODO Auto-generated method stub
 			ACLMessage msg = myAgent.receive();
 			//System.out.println(msg.getContent());
-			ArrayList<Carte> aJouer = new ArrayList();
+			ArrayList<Carte> aJouer = new ArrayList<Carte>();
 
 			if (msg!=null && msg.getPerformative()==ACLMessage.INFORM)
 			{		
@@ -328,6 +375,7 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 	public void sendMessage(String message) {
 		setReceiver();
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+		msg.setConversationId(CHAT_ID);
 		msg.setContent(message);
 		msg.addReceiver(receivers[0]);
 		msg.addReceiver(receivers[1]);

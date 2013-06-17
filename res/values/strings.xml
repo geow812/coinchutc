@@ -25,7 +25,7 @@
     <string name="title_activity_joueurs_connectes">Joueurs Connectes</string>
     <string name="title_activity_coinch_utc">Espace Coinch\'UTC</string>
     <string name="title_activity_regles_du_jeu">Regles du Jeu</string>
-    <string name="title_activity_connexion">Connextion</string>
+    <string name="title_activity_connexion">Connexion</string>
     <string name="msg_interface_exc">Internal error!</string>
     <string name="msg_controller_exc">Server error!</string>
     <string name="title_activity_partie">Partie</string>
@@ -37,7 +37,7 @@
     <string name="joueur3">JOUEUR 3</string>
     <string name="joueur4">JOUEUR 4</string>
     <string name="title_activity_creer_compte">Creer un compte</string>
-    <string name="messageToSendHint">Ecrivez votre message...</string>
+    <string name="messageToSendHint">Ecrivez votre message&#8230;</string>
     <string name="Send">ENVOYER</string>
     <string name="ImageProfil">Profil</string>
     <string name="Credits">Le jeu a été developpé par 4 étudiants de l\'UTC : Bruno Devaux, Rémi Clermont, Simon Lancelot, Yiou Wang. Pour toutes informations, envoyer-nous un mail à remi.clermont@gmail.com</string>

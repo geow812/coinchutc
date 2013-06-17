@@ -21,6 +21,7 @@ public class MainActivity extends Activity {
 	public static final String CONNECTE = "connecte";
 	private boolean connecte = false;
 	private String identifiant = "";
+	private String[] joueurs = new String[3];
 	private ConnexionInterface coincheClientInterface = null;
 	
 	@Override
@@ -31,9 +32,11 @@ public class MainActivity extends Activity {
 		connecte = settings.getBoolean(CONNECTE, false);
 		Log.d("MainActivity", "MainActivity starts!");
 		Bundle extras = getIntent().getExtras();
+		Log.d("MainActivity", "Connecte: " + connecte);
 		if (extras != null && connecte) {
-			Log.d("MainActivity", identifiant);
+
 			identifiant = extras.getString("identifiant");
+			Log.d("MainActivity", "Login succeeded: " + identifiant);
 		}
 		else {
 			finish();
@@ -49,12 +52,26 @@ public class MainActivity extends Activity {
 	}
 	
 	public void rejoindrePartie(View view) {
+		if (MicroRuntime.isRunning()) {
+			try {
+				AgentController ac = MicroRuntime.getAgent("Conn-" + identifiant);
+				coincheClientInterface = ac.getO2AInterface(ConnexionInterface.class);
+				if (coincheClientInterface != null)
+					joueurs = coincheClientInterface.getPlayersNames();
+			} catch (StaleProxyException e) {
+				showAlertDialog(getString(R.string.msg_interface_exc), true);
+			} catch (ControllerException e) {
+				showAlertDialog(getString(R.string.msg_controller_exc), true);
+			}
+		}
 		Intent intent = new Intent(this, RejoindrePartieActivity.class);
 		intent.putExtra("identifiant", identifiant);
+		intent.putExtra("joueurs", joueurs);
 		startActivity(intent);
 	}
 	
 	public void joueursConnectes(View view) {
+		
 		Intent intent = new Intent(this, JoueursConnectesActivity.class);
 		startActivity(intent);
 	}
