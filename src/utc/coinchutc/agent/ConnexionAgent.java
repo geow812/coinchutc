@@ -46,7 +46,6 @@ public class ConnexionAgent extends Agent implements ConnexionInterface {
 			if (args.length > 2) {
 				
 				option = (String) args[2];
-				System.out.println(option);
 			}
 		}
 		

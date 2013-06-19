@@ -25,13 +25,6 @@
 	        android:layout_gravity="center_horizontal"
 	        android:onClick="rejoindrePartie"
 	        android:text="@string/rejoindre_partie" />
-	    
-	    <Button
-	        style="@style/BoutonGrand"
-	        android:id="@+id/button_joueurs_connectes"
-	        android:layout_gravity="center_horizontal"
-	        android:onClick="joueursConnectes"
-	        android:text="@string/joueurs_connectes" />
 	
 	    <Button
 	        style="@style/BoutonGrand"

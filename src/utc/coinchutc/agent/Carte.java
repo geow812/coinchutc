@@ -1,19 +1,23 @@
 package utc.coinchutc.agent;
 
-public class Carte {
+import java.io.Serializable;
+
+public class Carte implements Serializable {
 	private int valeur; 
 	private String couleur;
 	private String image;
+	private String login;
 	
 	public Carte(){
 		
 	}
 	
-	public Carte(int val, String col, String img)
+	public Carte(int val, String col, String img, String login)
 	{
 		valeur = val;
 		couleur = col; 
 		image = img;
+		this.login = login;
 	}
 
 	public int getValeur() {
@@ -38,5 +42,17 @@ public class Carte {
 	
 	public void setImage(String img) {
 		this.image = img;
+	}
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+	
+	public String toString() {
+		return "carte " + couleur + valeur;
 	}
 }

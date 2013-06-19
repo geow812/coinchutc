@@ -11,10 +11,13 @@ import jade.util.leap.Properties;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 
+import utc.coinchutc.agent.Carte;
 import utc.coinchutc.agent.ConnexionInterface;
-import utc.coinchutc.agent.PartieAgent;
+import utc.coinchutc.agent.Main;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
@@ -27,6 +30,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -44,23 +48,103 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+
 public class PartieActivity extends Activity {
 
 	private Logger logger = Logger.getJADELogger(this.getClass().getName());
-	private PartieAgent partieAgent;
+	//private PartieAgent partieAgent;
 	private static final String[] annonces={"80","90","100","110","120","130","140","150","160","Capot"}; 
 	private static final String[] couleurs={"Pique","Trefle","Carreau","Coeur","Tout-Atout","Sans-Atout"}; 
-	private static final String[] cartes={}; 
 	private Spinner spinnerAnnonce, spinnerCouleur; 
 	private TextView joueur1, joueur2, joueur3, joueur4;
+	private ImageView carte1, carte2, carte3, carte4, carte5, carte6, carte7, carte8;
 	private String identifiant = "";
+	private String[] joueurs;
+	private int rang;
 	private MicroRuntimeServiceBinder microRuntimeServiceBinder;
 	private ServiceConnection serviceConnection;
 	private AlertDialog.Builder adb;
 	private boolean afficherPlis = false;
+	private Main main;
+	private ArrayList<Carte> cartes;
 	
 	//TODO : retirer ce flag
 	private int simul = 0;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_partie);
+		// Show the Up button in the action bar.
+		setupActionBar();
+		
+		findViewById(R.id.tapis).setOnDragListener(new MyDragListener());
+
+
+		//Affichage des noms des joueurs
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			identifiant = extras.getString("identifiant");
+			joueur1 = (TextView)findViewById(R.id.joueur1);
+			joueur1.setText(identifiant);
+			main = (Main) extras.getSerializable("cards");
+			Log.d("PartieActivity", "arrive in PartieActivity");
+			cartes = main.getMain();
+			Log.d("PartieActivity", "cast main to carte[]");
+			joueurs = extras.getStringArray("joueurs");
+			
+			//TODO:add cards
+			carte1 = (ImageView) findViewById(R.id.carte1);
+			carte2 = (ImageView) findViewById(R.id.carte2);
+			carte3 = (ImageView) findViewById(R.id.carte3);
+			carte4 = (ImageView) findViewById(R.id.carte4);
+			carte5 = (ImageView) findViewById(R.id.carte5);
+			carte6 = (ImageView) findViewById(R.id.carte6);
+			carte7 = (ImageView) findViewById(R.id.carte7);
+			carte8 = (ImageView) findViewById(R.id.carte8);
+			
+			carte1.setImageResource(getResources().getIdentifier(cartes.get(0).getCouleur().toLowerCase()+cartes.get(0).getValeur(), "drawable", getPackageName()));
+			carte2.setImageResource(getResources().getIdentifier(cartes.get(1).getCouleur().toLowerCase()+cartes.get(1).getValeur(), "drawable", getPackageName()));
+			carte3.setImageResource(getResources().getIdentifier(cartes.get(2).getCouleur().toLowerCase()+cartes.get(2).getValeur(), "drawable", getPackageName()));
+			carte4.setImageResource(getResources().getIdentifier(cartes.get(3).getCouleur().toLowerCase()+cartes.get(3).getValeur(), "drawable", getPackageName()));
+			carte5.setImageResource(getResources().getIdentifier(cartes.get(4).getCouleur().toLowerCase()+cartes.get(4).getValeur(), "drawable", getPackageName()));
+			carte6.setImageResource(getResources().getIdentifier(cartes.get(5).getCouleur().toLowerCase()+cartes.get(5).getValeur(), "drawable", getPackageName()));
+			carte7.setImageResource(getResources().getIdentifier(cartes.get(6).getCouleur().toLowerCase()+cartes.get(6).getValeur(), "drawable", getPackageName()));
+			carte8.setImageResource(getResources().getIdentifier(cartes.get(7).getCouleur().toLowerCase()+cartes.get(7).getValeur(), "drawable", getPackageName()));
+		}
+		
+		for (int i=0; i<4; i++) {
+			if (joueurs[i].equalsIgnoreCase(identifiant))
+				rang = i;
+		}
+		
+		joueur2 = (TextView)findViewById(R.id.joueur2);
+		joueur2.setText(joueurs[(rang+1)%4]);
+		joueur3 = (TextView)findViewById(R.id.joueur3);
+		joueur3.setText(joueurs[(rang+2)%4]);
+		joueur4 = (TextView)findViewById(R.id.joueur4);
+		joueur4.setText(joueurs[(rang+3)%4]);
+
+		// Assign the touch listener to your view which you want to move :
+		findViewById(R.id.carte1).setOnTouchListener(new MyTouchListener());
+		/* exemple de code pour changer l'image :
+		ImageView img = (ImageView)findViewById(R.id.carte1);
+		img.setImageResource(resId);
+		 */
+		findViewById(R.id.carte2).setOnTouchListener(new MyTouchListener());
+		findViewById(R.id.carte3).setOnTouchListener(new MyTouchListener());
+		findViewById(R.id.carte4).setOnTouchListener(new MyTouchListener());
+		findViewById(R.id.carte5).setOnTouchListener(new MyTouchListener());
+		findViewById(R.id.carte6).setOnTouchListener(new MyTouchListener());
+		findViewById(R.id.carte7).setOnTouchListener(new MyTouchListener());
+		findViewById(R.id.carte8).setOnTouchListener(new MyTouchListener());
+
+
+
+		//On appelle la méthode de lancement de partie ci dessous
+		//lancePartie();
+	}
+	//Fin de onCreate()
 
 	//TODO : virer cette méthode dans la version finale : (ici pour la simulation
 	public void commencerSimulation(View view) {
@@ -177,53 +261,7 @@ public class PartieActivity extends Activity {
 	}
 	
 	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_partie);
-		// Show the Up button in the action bar.
-		setupActionBar();
-
-		findViewById(R.id.tapis).setOnDragListener(new MyDragListener());
-
-
-
-		//Affichage des noms des joueurs
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
-			//TODO : remplacer les string des textView "nom de joueurs" par leur login via JADE
-
-			identifiant = extras.getString("identifiant");
-			joueur1 = (TextView)findViewById(R.id.joueur1);
-			joueur1.setText(identifiant);
-		}
-		joueur2 = (TextView)findViewById(R.id.joueur2);
-		joueur2.setText("rclermon");
-		joueur3 = (TextView)findViewById(R.id.joueur3);
-		joueur3.setText("slancelo");
-		joueur4 = (TextView)findViewById(R.id.joueur4);
-		joueur4.setText("wangyiou");
-
-		// Assign the touch listener to your view which you want to move :
-		findViewById(R.id.carte1).setOnTouchListener(new MyTouchListener());
-		/* exemple de code pour changer l'image :
-		ImageView img = (ImageView)findViewById(R.id.carte1);
-		img.setImageResource(resId);
-		 */
-		findViewById(R.id.carte2).setOnTouchListener(new MyTouchListener());
-		findViewById(R.id.carte3).setOnTouchListener(new MyTouchListener());
-		findViewById(R.id.carte4).setOnTouchListener(new MyTouchListener());
-		findViewById(R.id.carte5).setOnTouchListener(new MyTouchListener());
-		findViewById(R.id.carte6).setOnTouchListener(new MyTouchListener());
-		findViewById(R.id.carte7).setOnTouchListener(new MyTouchListener());
-		findViewById(R.id.carte8).setOnTouchListener(new MyTouchListener());
-
-
-
-		//On appelle la méthode de lancement de partie ci dessous
-		//lancePartie();
-	}
-	//Fin de onCreate()
+	
 
 	public void lancePartie(View view) {
 

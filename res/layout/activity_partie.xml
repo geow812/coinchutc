@@ -234,64 +234,56 @@
             android:layout_width="33dp"
             android:layout_height="50dp"
             android:contentDescription="@string/carte"
-            android:scaleType="fitXY"
-            android:src="@drawable/carreau14" />
+            android:scaleType="fitXY" />
 
         <ImageView
             android:id="@+id/carte2"
             android:layout_width="33dp"
             android:layout_height="50dp"
             android:contentDescription="@string/carte"
-            android:scaleType="fitXY"
-            android:src="@drawable/carreau13" />
+            android:scaleType="fitXY" />
 
         <ImageView
             android:id="@+id/carte3"
             android:layout_width="33dp"
             android:layout_height="50dp"
             android:contentDescription="@string/carte"
-            android:scaleType="fitXY"
-            android:src="@drawable/carreau12" />
+            android:scaleType="fitXY" />
 
         <ImageView
             android:id="@+id/carte4"
             android:layout_width="33dp"
             android:layout_height="50dp"
             android:contentDescription="@string/carte"
-            android:scaleType="fitXY"
-            android:src="@drawable/pique11" />
+            android:scaleType="fitXY" />
 
         <ImageView
             android:id="@+id/carte5"
             android:layout_width="33dp"
             android:layout_height="50dp"
             android:contentDescription="@string/carte"
-            android:scaleType="fitXY"
-            android:src="@drawable/pique9" />
+            android:scaleType="fitXY" />
 
         <ImageView
             android:id="@+id/carte6"
             android:layout_width="33dp"
             android:layout_height="50dp"
             android:contentDescription="@string/carte"
-            android:scaleType="fitXY"
-            android:src="@drawable/pique14" />
+            android:scaleType="fitXY" />
 
         <ImageView
             android:id="@+id/carte7"
             android:layout_width="33dp"
             android:layout_height="50dp"
             android:contentDescription="@string/carte"
-            android:scaleType="fitXY"
-            android:src="@drawable/coeur10" />
+            android:scaleType="fitXY" />
 
         <ImageView
             android:id="@+id/carte8"
             android:layout_width="33dp"
             android:layout_height="50dp"
             android:contentDescription="@string/carte"
-            android:scaleType="fitXY"
-            android:src="@drawable/coeur7" />
+            android:scaleType="fitXY" />
     </LinearLayout>
 
     <RelativeLayout

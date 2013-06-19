@@ -11,6 +11,7 @@ import java.util.HashMap;
 
 import utc.coinchutc.agent.JoueurAgent;
 import utc.coinchutc.agent.JoueurInterface;
+import utc.coinchutc.agent.Main;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -23,6 +24,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -37,6 +39,7 @@ public class RejoindrePartieActivity extends Activity {
 
 	private String identifiant = "";
 	private String[] joueurs = new String[3];
+	private String[] orderedJoueurs;
 	private JoueurInterface joueurInterface = null;
 
 	//ArrayList that will hold the original Data
@@ -54,11 +57,36 @@ public class RejoindrePartieActivity extends Activity {
 	}
 	
 	@Override
+	public void onBackPressed () {
+		Intent intent = new Intent(this, MainActivity.class);
+		intent.putExtra("identifiant", MainActivity.identifiant);
+		startActivity(intent);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// This ID represents the Home or Up button. In the case of this
+			// activity, the Up button is shown. Use NavUtils to allow users
+			// to navigate up one level in the application structure. For
+			// more details, see the Navigation pattern on Android Design:
+			//
+			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
+			//
+			Intent intent = new Intent(this, MainActivity.class);
+			intent.putExtra("identifiant", MainActivity.identifiant);
+			startActivity(intent);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rejoindre_partie);
 		list_players = (ListView) findViewById(R.id.list_connected_players);
-		
 
 
 		// get the identifiant from the intent
@@ -82,6 +110,11 @@ public class RejoindrePartieActivity extends Activity {
 		joueursFilter.addAction("coinchutc.REFRESH_JOUEURS");
 		registerReceiver(myReceiver, joueursFilter);
 		
+		// get the broadcast for fin chat
+		IntentFilter recupFilter = new IntentFilter();
+		recupFilter.addAction("coinchutc.RECUP");
+		registerReceiver(myReceiver, recupFilter);
+		
 
 		//get the LayoutInflater for inflating the customomView
 		//this will be used in the custom adapter
@@ -99,7 +132,7 @@ public class RejoindrePartieActivity extends Activity {
 		players.add(temp); 
 		
 		for (String joueur: joueurs) {
-			if (joueur != null) {
+			if (joueur != null && !joueur.equalsIgnoreCase(identifiant)) {
 				HashMap<String , Object> temp2 = new HashMap<String, Object>();
 				Log.d("RejoindrePartieActivity", "Receive joueurs " + joueur);
 				temp2.put("name", joueur); 
@@ -117,7 +150,7 @@ public class RejoindrePartieActivity extends Activity {
 				final View profilDialogBoxView = factory.inflate(R.layout.profil_dialogbox, null);
 				@SuppressWarnings("unchecked")
 				HashMap<String , Object> value = (HashMap<String, Object>) list_players.getItemAtPosition(position);
-				Log.d("RejoindrePartieActivity:", (String)value.get("name"));
+				Log.d("RejoindrePartieActivity", (String)value.get("name"));
 				AlertDialog.Builder builder = new AlertDialog.Builder(RejoindrePartieActivity.this);
 				int imageId = (Integer)value.get("photo");
 				
@@ -225,7 +258,9 @@ public class RejoindrePartieActivity extends Activity {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
+			Log.d("RejoindrePartieActivity", "receive");
 			String action = intent.getAction();
+			Log.d("RejoindrePartieActivity", "Receive action " + action);
 			if (action.equalsIgnoreCase("coinchutc.REFRESH_CHAT")) {
 				Bundle extras = intent.getExtras();
 				if (extras != null) {
@@ -244,14 +279,29 @@ public class RejoindrePartieActivity extends Activity {
 					Log.d("RejoindrePartieActivity", "Joueurs Refreshed");
 				}
 			}
+			else if (action.equalsIgnoreCase("coinchutc.RECUP")) {
+				Log.d("RejoindrePartieActivity", "RECUP");
+				Bundle extras = intent.getExtras();
+				if (extras != null) {
+					Main main = (Main) extras.getSerializable("cards");
+					orderedJoueurs = extras.getStringArray("players");
+					//String recup = extras.getString("cards");
+					Log.d("RejoindrePartieActivity", "Receive " + main.toString());
+					startPartie(main);
+				}
+			}
 		}
+
+
 
 		private void refreshJoueurs(final String sender) {
 			HashMap<String, Object> newPlayer = new HashMap<String, Object> ();
 			newPlayer.put("name", sender);
 			newPlayer.put("photo", getResources().getIdentifier(sender, "drawable", getPackageName()) == 0?R.drawable.generic : getResources().getIdentifier(sender, "drawable", getPackageName()));
+			
 			players.add(newPlayer);
 			adapter.notifyDataSetChanged();
+
 		}
 
 		private void refreshChat(String sender, String message) {
@@ -260,7 +310,14 @@ public class RejoindrePartieActivity extends Activity {
 		}
 	}
 	
-
+	private void startPartie(Main main) {
+		Log.d("RejoindrePartieActivity", "Start Partie");
+		Intent intent = new Intent(this, PartieActivity.class);
+		intent.putExtra("identifiant", identifiant);
+		intent.putExtra("cards", main);
+		intent.putExtra("joueurs", orderedJoueurs);
+		startActivity(intent);
+	}
 
 	//define your custom adapter
 	private class CustomAdapter extends ArrayAdapter<HashMap<String, Object>>
@@ -335,6 +392,12 @@ public class RejoindrePartieActivity extends Activity {
 					checkBoxState[i] = temps[i];
 				}
 			}
+			
+			if (!players.get(position).get("name").toString().equals(identifiant))
+				viewHolder.checkBox.setEnabled(false);
+			else
+				viewHolder.checkBox.setEnabled(true);
+				
 			viewHolder.checkBox.setChecked(checkBoxState[position]);
 
 
@@ -345,8 +408,38 @@ public class RejoindrePartieActivity extends Activity {
 			viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
 
 				public void onClick(View v) {
-					if(((CheckBox)v).isChecked())
+					if(((CheckBox)v).isChecked()) {
 						checkBoxState[position]=true;
+						if (position == 0) {
+							((CheckBox)v).setChecked(true);
+							//Si on est ici, c'est qu'on a checké "Pret" pour l'utilisateur
+							//On envoi le message correspondant en Jade au serveur :
+							//(j'ai récupéré ici le corps du code d'envoi de message de chat :
+							if (MicroRuntime.isRunning()) {
+								Log.d("RejoindrePartieActivity", "MicroRuntime Running");
+								try {
+									AgentController ac = MicroRuntime.getAgent(identifiant);
+									if (ac == null)
+										Log.e("RejoindrePartieActivity", "Error getting controlleur");
+									joueurInterface = ac.getO2AInterface(JoueurInterface.class);
+									if (joueurInterface != null) {
+										joueurInterface.sendRejoindreRequest("subscribe");
+									}
+									else {
+										Log.e("RejoindrePartieActivity", "Error getting interface");
+									}
+								} catch (StaleProxyException e) {
+									showAlertDialog(getString(R.string.msg_interface_exc), true);
+								} catch (ControllerException e) {
+									showAlertDialog(getString(R.string.msg_controller_exc), true);
+								}
+							}
+							else {
+								Log.e("RejoindrePartieActivity", "MicroRuntime stopped");
+							}
+							//Fin de l'envoi Jade
+						}
+					}
 					else
 						checkBoxState[position]=false;
 

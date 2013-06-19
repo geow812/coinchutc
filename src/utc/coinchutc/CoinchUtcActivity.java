@@ -3,6 +3,7 @@ package utc.coinchutc;
 import utc.coinchutc.R;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -26,6 +27,13 @@ public class CoinchUtcActivity extends Activity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 	}
+	
+	@Override
+	public void onBackPressed () {
+		Intent intent = new Intent(this, MainActivity.class);
+		intent.putExtra("identifiant", MainActivity.identifiant);
+		startActivity(intent);
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -45,7 +53,9 @@ public class CoinchUtcActivity extends Activity {
 			//
 			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
 			//
-			NavUtils.navigateUpFromSameTask(this);
+			Intent intent = new Intent(this, MainActivity.class);
+			intent.putExtra("identifiant", MainActivity.identifiant);
+			startActivity(intent);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

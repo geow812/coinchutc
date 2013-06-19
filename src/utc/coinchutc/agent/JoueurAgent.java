@@ -3,7 +3,6 @@ package utc.coinchutc.agent;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
 import jade.domain.DFService;
@@ -12,8 +11,6 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-
-import java.util.ArrayList;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -30,6 +27,7 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 	private static final String CHAT_ID = "__chat__";
 	private static final String NOTIF = "__notif__";
 	private Carte[] main;
+	private Main mainSerial;
 	private String main2;
 	private String nom;
 	private String prenom;
@@ -38,7 +36,9 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 
 	private AID[] receivers = new AID[3];
 	private String[] joueurs = new String[3];
+	private String[] orderedPlayers = new String[4];
 	private boolean rejoindre = false;
+	private boolean finiReceiveNotifBehaviour = false;
 	
 	protected void setup()
 	{
@@ -143,14 +143,15 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 		}
 	}
 	
-	public class ReceiveNotifBehaviour extends CyclicBehaviour {
-
+	public class ReceiveNotifBehaviour extends Behaviour {
+		
 		@Override
 		public void action() {
 			MessageTemplate rcvNotifTemplate = MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.INFORM),
 					MessageTemplate.MatchConversationId(NOTIF));
 			ACLMessage notif = myAgent.receive(rcvNotifTemplate);
 			if (notif != null) {
+				
 				Intent broadcast = new Intent();
 				broadcast.setAction("coinchutc.REFRESH_JOUEURS");
 				broadcast.putExtra("sender", notif.getSender().getLocalName());
@@ -160,19 +161,25 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 			else
 				block();
 		}
+
+		@Override
+		public boolean done() {
+			return finiReceiveNotifBehaviour;
+		}
 	}
 
 	public class ChatBehaviour extends Behaviour{
 		private boolean fini = false;
 		@Override
 		public void action() {
-			MessageTemplate chatTemplate = MessageTemplate.MatchConversationId(CHAT_ID);
+			MessageTemplate chatTemplate = MessageTemplate.MatchConversationId(CHAT_ID),
+					finChatTemplate = MessageTemplate.MatchPerformative(ACLMessage.CONFIRM);
 
-			ACLMessage msg = myAgent.receive(chatTemplate);
+			ACLMessage msg = myAgent.receive(chatTemplate), msg2 = myAgent.receive(finChatTemplate);
 			
 			if (msg!=null && msg.getPerformative() == ACLMessage.INFORM)
 			{
-				//changes.firePropertyChange("chat", msg.getSender().getLocalName(), msg.getContent());
+				// If receive chat message from other agents
 				Intent broadcast = new Intent();
 				broadcast.setAction("coinchutc.REFRESH_CHAT");
 				broadcast.putExtra("sender", msg.getSender().getLocalName());
@@ -180,10 +187,15 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 				Log.d("JoueurAgent", "Sending broadcast " + broadcast.getAction());
 				context.sendBroadcast(broadcast);
 			}
-			else if (msg!=null && msg.getPerformative()==ACLMessage.CONFIRM)
+			else if (msg2 != null)
 			{
-				fini=true;
+				// If receive stop chat message from the PartieAgent
+				orderedPlayers = msg2.getContent().split(",");
+				finiReceiveNotifBehaviour = true;
+				fini = true;
 			}
+			else
+				block();
 		}
 
 		@Override
@@ -199,31 +211,31 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 		@Override
 		public void action() {
 			ACLMessage msg = myAgent.receive();
-			if(msg!=null && msg.getPerformative()==ACLMessage.INFORM)
+			if(msg != null && msg.getPerformative() == ACLMessage.INFORM)
 			{
-				Log.d("JoueurAgent", "message reçu : "+msg.getContent()+" par : "+myAgent.getLocalName());
+				Log.d("JoueurAgent", "message reçu : " + msg.getContent() + " par : " + myAgent.getLocalName());
 				//main2 = msg.getContent();
 				String s = msg.getContent(); // chaine JSON
 				ObjectMapper mapper = new ObjectMapper();
 				try {
 					Carte card = mapper.readValue(s, Carte.class);
-					main[ind]=card;
-
-					//changes.firePropertyChange("new card", null, card);
-					//TODO: broadcast the message to PartieActivity
-
-					Intent broadcast = new Intent();
-					broadcast.setAction("coinchutc.RECUP");
-					broadcast.putExtra("new card", msg.getContent());
-					Log.d("JoueurAgent", "Sending broadcast " + broadcast.getAction());
-					context.sendBroadcast(broadcast);
-					
+					main[ind] = card;
+					Log.d("JoueurAgent", "Card: " + card.toString());
 					ind++;
 				}
-				catch(Exception ex) {}
+				catch(Exception ex) {
+					Log.d("JoueurAgent", "Parse problem");
+				}
 			}
 			if (ind==8)
 			{
+				mainSerial = new Main(main);
+				Intent broadcast = new Intent();
+				broadcast.setAction("coinchutc.RECUP");
+				broadcast.putExtra("cards", mainSerial); 
+				broadcast.putExtra("players", orderedPlayers);
+				Log.d("JoueurAgent", "Sending broadcast " + broadcast.getAction() + " " + mainSerial.toString());
+				context.sendBroadcast(broadcast);
 				fini = true;
 			}
 		}
@@ -242,11 +254,12 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 			// TODO Auto-generated method stub
 			ACLMessage msg = myAgent.receive();
 
-			if(msg!=null && msg.getPerformative()==ACLMessage.CONFIRM)
+			if (msg != null && msg.getPerformative() == ACLMessage.CONFIRM)
 			{
 
 				//changes.firePropertyChange("fini", null, "fini");
 				//TODO:broadcast to PartieActivity
+				
 				fini = true; 
 
 			}
@@ -259,82 +272,82 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 
 	}
 
-	public class JouerBehaviour extends Behaviour{
-		private boolean fini=false;
-		private String annonce;
-		private boolean atout=false;
-		private int compteur = 0;
-		@Override
-		public void action() {
-			//System.out.println("je suis dans jouer");
-			// TODO Auto-generated method stub
-			ACLMessage msg = myAgent.receive();
-			//System.out.println(msg.getContent());
-			ArrayList<Carte> aJouer = new ArrayList<Carte>();
-
-			if (msg!=null && msg.getPerformative()==ACLMessage.INFORM)
-			{		
-				annonce = PartieAgent.annonce.getCouleur();
-				System.out.println("couleur annoncé : "+annonce);
-				if (PartieAgent.tapis[0].getValeur()!=0)
-				{
-					if (PartieAgent.tapis[0].getCouleur().equals(annonce))
-						atout=true;
-					
-					if(atout==true)
-					{
-						for(int i=0;i<8;i++)
-						{
-							if (main[i].getCouleur().equals(annonce))
-								aJouer.add(main[i]);
-						}
-						if (aJouer.size()==0)
-						{
-							for (int i=0;i<8;i++)
-								aJouer.add(main[i]);
-						}
-					}
-					else 
-					{
-						for(int i=0;i<8;i++)
-						{
-							if (main[i].getCouleur().equals(PartieAgent.tapis[0].getCouleur()))
-								aJouer.add(main[i]);
-						}
-						if (aJouer.size()==0)
-						{
-							for (int i=0;i<8;i++)
-							{
-								if(main[i].getCouleur().equals(annonce))
-									aJouer.add(main[i]);
-							}
-						}
-						if (aJouer.size()==0)
-						{
-							for (int i=0;i<8;i++)
-							{
-								aJouer.add(main[i]);
-							}
-						}
-					}
-				}
-				//TODO:broadcast to PartieActivity
-				//changes.firePropertyChange("cartesDispo", null, aJouer);
-				//changes.firePropertyChange("jouer",null,"go");
-				//changes.firePropertyChange("finJeu",null,"fin");
-				
-				//fini=true;
-			}
-
-		}
-		@Override
-		public boolean done() {
-			// TODO Auto-generated method stub
-			return fini;
-		}
-
-
-	}
+//	public class JouerBehaviour extends Behaviour{
+//		private boolean fini=false;
+//		private String annonce;
+//		private boolean atout=false;
+//		private int compteur = 0;
+//		@Override
+//		public void action() {
+//			//System.out.println("je suis dans jouer");
+//			// TODO Auto-generated method stub
+//			ACLMessage msg = myAgent.receive();
+//			//System.out.println(msg.getContent());
+//			ArrayList<Carte> aJouer = new ArrayList<Carte>();
+//
+//			if (msg!=null && msg.getPerformative()==ACLMessage.INFORM)
+//			{		
+//				annonce = PartieAgent.annonce.getCouleur();
+//				System.out.println("couleur annoncé : "+annonce);
+//				if (PartieAgent.tapis[0].getValeur()!=0)
+//				{
+//					if (PartieAgent.tapis[0].getCouleur().equals(annonce))
+//						atout=true;
+//					
+//					if(atout==true)
+//					{
+//						for(int i=0;i<8;i++)
+//						{
+//							if (main[i].getCouleur().equals(annonce))
+//								aJouer.add(main[i]);
+//						}
+//						if (aJouer.size()==0)
+//						{
+//							for (int i=0;i<8;i++)
+//								aJouer.add(main[i]);
+//						}
+//					}
+//					else 
+//					{
+//						for(int i=0;i<8;i++)
+//						{
+//							if (main[i].getCouleur().equals(PartieAgent.tapis[0].getCouleur()))
+//								aJouer.add(main[i]);
+//						}
+//						if (aJouer.size()==0)
+//						{
+//							for (int i=0;i<8;i++)
+//							{
+//								if(main[i].getCouleur().equals(annonce))
+//									aJouer.add(main[i]);
+//							}
+//						}
+//						if (aJouer.size()==0)
+//						{
+//							for (int i=0;i<8;i++)
+//							{
+//								aJouer.add(main[i]);
+//							}
+//						}
+//					}
+//				}
+//				//TODO:broadcast to PartieActivity
+//				//changes.firePropertyChange("cartesDispo", null, aJouer);
+//				//changes.firePropertyChange("jouer",null,"go");
+//				//changes.firePropertyChange("finJeu",null,"fin");
+//				
+//				//fini=true;
+//			}
+//
+//		}
+//		@Override
+//		public boolean done() {
+//			// TODO Auto-generated method stub
+//			return fini;
+//		}
+//
+//
+//	}
 
 
 	public Carte[] getMain() {
@@ -380,7 +393,15 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 		msg.addReceiver(receivers[0]);
 		msg.addReceiver(receivers[1]);
 		msg.addReceiver(receivers[2]);
-		send(msg);
+		this.send(msg);
+	}
+
+	@Override
+	public void sendRejoindreRequest(String message) {
+		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+		msg.setContent("subscribe");
+		msg.addReceiver(new AID("Partie1", AID.ISLOCALNAME));
+		this.send(msg);
 	}
 
 

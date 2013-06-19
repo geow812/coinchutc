@@ -5,15 +5,18 @@ import jade.android.MicroRuntimeService;
 import jade.android.MicroRuntimeServiceBinder;
 import jade.android.RuntimeCallback;
 import jade.core.MicroRuntime;
+import jade.core.NotFoundException;
 import jade.core.Profile;
 import jade.util.Logger;
 import jade.util.leap.Properties;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
+import jade.wrapper.StaleProxyException;
 
 import java.util.logging.Level;
 
 import utc.coinchutc.agent.ConnexionAgent;
+import utc.coinchutc.agent.ConnexionInterface;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -258,6 +261,14 @@ public class ConnexionActivity extends Activity {
 			}
 			if (action.equalsIgnoreCase("coinchutc.LOGIN_FAIL")) {
 				ShowDialog("Login a ¨¦chou¨¦");
+				if (MicroRuntime.isRunning()) {
+					try {
+						MicroRuntime.killAgent("Conn-" + identifiant);
+						//MicroRuntime.detach();
+					} catch (NotFoundException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 	}

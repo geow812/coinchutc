@@ -20,7 +20,7 @@ public class MainActivity extends Activity {
 	
 	public static final String CONNECTE = "connecte";
 	private boolean connecte = false;
-	private String identifiant = "";
+	public static String identifiant = "";
 	private String[] joueurs = new String[3];
 	private ConnexionInterface coincheClientInterface = null;
 	
@@ -31,15 +31,14 @@ public class MainActivity extends Activity {
 		SharedPreferences settings = getSharedPreferences("jadeChatPrefsFile",0);
 		connecte = settings.getBoolean(CONNECTE, false);
 		Log.d("MainActivity", "MainActivity starts!");
-		Bundle extras = getIntent().getExtras();
 		Log.d("MainActivity", "Connecte: " + connecte);
+		Bundle extras = getIntent().getExtras();
 		if (extras != null && connecte) {
-
+			// If already connected
 			identifiant = extras.getString("identifiant");
 			Log.d("MainActivity", "Login succeeded: " + identifiant);
 		}
 		else {
-			finish();
 			login();
 		}
 	}
@@ -50,6 +49,7 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
 	
 	public void rejoindrePartie(View view) {
 		if (MicroRuntime.isRunning()) {
@@ -67,12 +67,6 @@ public class MainActivity extends Activity {
 		Intent intent = new Intent(this, RejoindrePartieActivity.class);
 		intent.putExtra("identifiant", identifiant);
 		intent.putExtra("joueurs", joueurs);
-		startActivity(intent);
-	}
-	
-	public void joueursConnectes(View view) {
-		
-		Intent intent = new Intent(this, JoueursConnectesActivity.class);
 		startActivity(intent);
 	}
 	
@@ -108,7 +102,6 @@ public class MainActivity extends Activity {
 					MicroRuntime.killAgent("Conn-" + identifiant);
 					//MicroRuntime.detach();
 				} catch (NotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			} catch (StaleProxyException e) {

@@ -36,6 +36,13 @@ public class ReglesDuJeuActivity extends Activity {
 		return true;
 	}
 	
+	@Override
+	public void onBackPressed () {
+		Intent intent = new Intent(this, MainActivity.class);
+		intent.putExtra("identifiant", MainActivity.identifiant);
+		startActivity(intent);
+	}
+	
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -48,7 +55,9 @@ public class ReglesDuJeuActivity extends Activity {
 			//
 			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
 			//
-			NavUtils.navigateUpFromSameTask(this);
+			Intent intent = new Intent(this, MainActivity.class);
+			intent.putExtra("identifiant", MainActivity.identifiant);
+			startActivity(intent);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

@@ -24,7 +24,6 @@
             android:noHistory="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -88,15 +87,7 @@
             android:theme="@style/FullscreenTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="utc.coinchutc.CreerPartieActivity" />
-        </activity>
-        <activity
-            android:name="utc.coinchutc.CreerCompteActivity"
-            android:label="@string/title_activity_creer_compte"
-            android:parentActivityName="utc.coinchutc.ConnexionActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="utc.coinchutc.ConnexionActivity" />
+                android:value="utc.coinchutc.MainActivity" />
         </activity>
         <activity
             android:name="utc.coinchutc.ReglePrincipeActivity"
