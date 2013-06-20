@@ -12,6 +12,8 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
+import java.io.StringWriter;
+
 import org.codehaus.jackson.map.ObjectMapper;
 
 import android.content.Context;
@@ -26,6 +28,7 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 	protected static final int CHAT_EVENT = 3;
 	private static final String CHAT_ID = "__chat__";
 	private static final String NOTIF = "__notif__";
+
 	private Carte[] main;
 	private Main mainSerial;
 	private String main2;
@@ -251,17 +254,21 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 		private boolean fini = false;
 		@Override
 		public void action() {
-			// TODO Auto-generated method stub
+			
 			ACLMessage msg = myAgent.receive();
-
-			if (msg != null && msg.getPerformative() == ACLMessage.CONFIRM)
+			if(msg!=null && msg.getPerformative() == ACLMessage.CONFIRM)
 			{
 
 				//changes.firePropertyChange("fini", null, "fini");
-				//TODO:broadcast to PartieActivity
-				
 				fini = true; 
 
+			}
+			else if (msg != null && msg.getPerformative() == ACLMessage.INFORM)
+			{
+				Intent broadcast = new Intent();
+				broadcast.setAction("coinchutc.ANNONCE");
+				Log.d("JoueurAgent", "Sending broadcast " + broadcast.getAction());
+				context.sendBroadcast(broadcast);
 			}
 		}
 
@@ -402,6 +409,26 @@ public class JoueurAgent extends Agent implements JoueurInterface{
 		msg.setContent("subscribe");
 		msg.addReceiver(new AID("Partie1", AID.ISLOCALNAME));
 		this.send(msg);
+	}
+
+	@Override
+	public void annonce(int point, String couleur) {
+		ObjectMapper mapper = new ObjectMapper();
+		StringWriter sw = new StringWriter();
+		try {
+
+			Annonce ann = new Annonce(point, couleur);
+			mapper.writeValue(sw, ann);
+			String s = sw.toString();
+			ACLMessage msg = new ACLMessage(ACLMessage.CONFIRM);
+			msg.setContent(s);
+			msg.addReceiver(new AID("Partie1", AID.ISLOCALNAME));
+
+			send(msg);
+
+		}
+		catch(Exception ex) {}
+		
 	}
 
 

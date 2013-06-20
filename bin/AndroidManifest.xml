@@ -28,14 +28,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="utc.coinchutc.CreerPartieActivity"
-            android:label="@string/title_activity_creer_partie"
-            android:parentActivityName="utc.coinchutc.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="utc.coinchutc.MainActivity" />
-        </activity>
-        <activity
             android:name="utc.coinchutc.CreditsActivity"
             android:label="@string/title_activity_credits"
             android:parentActivityName="utc.coinchutc.MainActivity" >

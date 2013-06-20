@@ -8,14 +8,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/simulation"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:onClick="demoPartie"
-            android:text="@string/demo"
-            android:textColor="@color/white" />
-
             <TextView
                 android:id="@+id/text_joueurs_connecter"
                 style="@style/Titre"

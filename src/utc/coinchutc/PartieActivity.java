@@ -1,34 +1,24 @@
 package utc.coinchutc;
 
-import jade.android.AndroidHelper;
-import jade.android.MicroRuntimeService;
-import jade.android.MicroRuntimeServiceBinder;
-import jade.android.RuntimeCallback;
 import jade.core.MicroRuntime;
-import jade.core.Profile;
-import jade.util.Logger;
-import jade.util.leap.Properties;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
+import jade.wrapper.StaleProxyException;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
 
 import utc.coinchutc.agent.Carte;
-import utc.coinchutc.agent.ConnexionInterface;
+import utc.coinchutc.agent.JoueurInterface;
 import utc.coinchutc.agent.Main;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.ClipData;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.content.SharedPreferences;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.DragEvent;
@@ -51,7 +41,7 @@ import android.widget.TextView;
 
 public class PartieActivity extends Activity {
 
-	private Logger logger = Logger.getJADELogger(this.getClass().getName());
+	//private Logger logger = Logger.getJADELogger(this.getClass().getName());
 	//private PartieAgent partieAgent;
 	private static final String[] annonces={"80","90","100","110","120","130","140","150","160","Capot"}; 
 	private static final String[] couleurs={"Pique","Trefle","Carreau","Coeur","Tout-Atout","Sans-Atout"}; 
@@ -61,16 +51,20 @@ public class PartieActivity extends Activity {
 	private String identifiant = "";
 	private String[] joueurs;
 	private int rang;
-	private MicroRuntimeServiceBinder microRuntimeServiceBinder;
-	private ServiceConnection serviceConnection;
+	//private MicroRuntimeServiceBinder microRuntimeServiceBinder;
+	//private ServiceConnection serviceConnection;
 	private AlertDialog.Builder adb;
 	private boolean afficherPlis = false;
 	private Main main;
 	private ArrayList<Carte> cartes;
+	private MyReceiver myReceiver;
 	
 	//TODO : retirer ce flag
 	private int simul = 0;
-	
+	protected String pointAnnonce;
+	protected String couleurAnnonce;
+	protected JoueurInterface joueurInterface;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -78,22 +72,23 @@ public class PartieActivity extends Activity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 		
+		myReceiver = new MyReceiver();
+		IntentFilter annonceFilter = new IntentFilter("utc.coinchutc.ANNONCE");
+		registerReceiver(myReceiver, annonceFilter);
+		Log.d("Annonce", "Create filter ANNONCE");
+		
 		findViewById(R.id.tapis).setOnDragListener(new MyDragListener());
 
-
-		//Affichage des noms des joueurs
+		//Affichage des noms des joueurs et des cartes de joueur 1
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			identifiant = extras.getString("identifiant");
 			joueur1 = (TextView)findViewById(R.id.joueur1);
 			joueur1.setText(identifiant);
 			main = (Main) extras.getSerializable("cards");
-			Log.d("PartieActivity", "arrive in PartieActivity");
 			cartes = main.getMain();
-			Log.d("PartieActivity", "cast main to carte[]");
 			joueurs = extras.getStringArray("joueurs");
 			
-			//TODO:add cards
 			carte1 = (ImageView) findViewById(R.id.carte1);
 			carte2 = (ImageView) findViewById(R.id.carte2);
 			carte3 = (ImageView) findViewById(R.id.carte3);
@@ -127,10 +122,6 @@ public class PartieActivity extends Activity {
 
 		// Assign the touch listener to your view which you want to move :
 		findViewById(R.id.carte1).setOnTouchListener(new MyTouchListener());
-		/* exemple de code pour changer l'image :
-		ImageView img = (ImageView)findViewById(R.id.carte1);
-		img.setImageResource(resId);
-		 */
 		findViewById(R.id.carte2).setOnTouchListener(new MyTouchListener());
 		findViewById(R.id.carte3).setOnTouchListener(new MyTouchListener());
 		findViewById(R.id.carte4).setOnTouchListener(new MyTouchListener());
@@ -139,12 +130,16 @@ public class PartieActivity extends Activity {
 		findViewById(R.id.carte7).setOnTouchListener(new MyTouchListener());
 		findViewById(R.id.carte8).setOnTouchListener(new MyTouchListener());
 
-
-
 		//On appelle la méthode de lancement de partie ci dessous
 		//lancePartie();
 	}
 	//Fin de onCreate()
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		unregisterReceiver(myReceiver);
+	}
 
 	//TODO : virer cette méthode dans la version finale : (ici pour la simulation
 	public void commencerSimulation(View view) {
@@ -168,12 +163,7 @@ public class PartieActivity extends Activity {
 		((View)findViewById(R.id.annonceJ2Points)).setVisibility(View.GONE);
 		((TextView)findViewById(R.id.annonceJ2String)).setText("PASSE");
 		
-
-		
-		
 		annoncer();
-		
-		
 		
 		((Button)findViewById(R.id.continuerSimul)).setVisibility(View.VISIBLE);
 	}
@@ -197,7 +187,6 @@ public class PartieActivity extends Activity {
 			myImage4.setAlpha(127);
 			ImageView myImage5 = (ImageView) findViewById(R.id.carte8);
 			myImage5.setAlpha(127);
-			
 			
 			
 			LinearLayout annonceJ3 = (LinearLayout) findViewById(R.id.annonceLayoutJoueur3);
@@ -260,27 +249,24 @@ public class PartieActivity extends Activity {
 	
 	}
 	
-	
-	
-
-	public void lancePartie(View view) {
-
-
-		try {
-			SharedPreferences settings = getSharedPreferences("jadeChatPrefsFile", 0);
-			String host = settings.getString("defaultHost", "");
-			String port = settings.getString("defaultPort", "");
-			startChat(identifiant, host, port, agentStartupCallback);
-			SharedPreferences.Editor editor = settings.edit();
-			editor.putBoolean(MainActivity.CONNECTE, true);
-			editor.commit();
-			//				Intent intent = new Intent(this, MainActivity.class);
-			//				intent.putExtra("identifiant", identifiant);
-			//				startActivity(intent);
-		} catch (Exception ex) {
-			logger.log(Level.SEVERE, "Unexpected exception creating chat agent!");
-		}
-	}
+//	public void lancePartie(View view) {
+//
+//
+//		try {
+//			SharedPreferences settings = getSharedPreferences("jadeChatPrefsFile", 0);
+//			String host = settings.getString("defaultHost", "");
+//			String port = settings.getString("defaultPort", "");
+//			startChat(identifiant, host, port, agentStartupCallback);
+//			SharedPreferences.Editor editor = settings.edit();
+//			editor.putBoolean(MainActivity.CONNECTE, true);
+//			editor.commit();
+//			//				Intent intent = new Intent(this, MainActivity.class);
+//			//				intent.putExtra("identifiant", identifiant);
+//			//				startActivity(intent);
+//		} catch (Exception ex) {
+//			logger.log(Level.SEVERE, "Unexpected exception creating chat agent!");
+//		}
+//	}
 
 	// This defines your touch listener
 	private final class MyTouchListener implements OnTouchListener {
@@ -388,6 +374,23 @@ public class PartieActivity extends Activity {
 				//Pour l'instant, on s'occupe de la démo !
 				LinearLayout annonceJ1 = (LinearLayout) findViewById(R.id.annonceLayoutJoueur1);
 				annonceJ1.setVisibility(View.VISIBLE);
+				
+				//changes.firePropertyChange("finAnnonce",null,null);
+				if (MicroRuntime.isRunning()) {
+					Log.d("PartieActivity", "MicroRuntime Running");
+					try {
+						AgentController ac = MicroRuntime.getAgent(identifiant);
+						joueurInterface = ac.getO2AInterface(JoueurInterface.class);
+						if (joueurInterface != null)
+							joueurInterface.annonce(Integer.parseInt(pointAnnonce), couleurAnnonce);
+					} catch (StaleProxyException e) {
+					} catch (ControllerException e) {
+					}
+				}
+				else {
+					Log.d("RejoindrePartieActivity", "MicroRuntime stopped");
+				}
+				
 			} });
 		
 		adb.setNeutralButton("Coincher", new DialogInterface.OnClickListener() {
@@ -413,21 +416,21 @@ public class PartieActivity extends Activity {
 		spinnerAnnonce.setAdapter(adapterAnnonce);
 		spinnerAnnonce.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 		    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-		        Object item = parent.getItemAtPosition(pos);
-		        ((TextView)findViewById(R.id.annonceJ1Points)).setText((String)item);
+		        pointAnnonce = (String) parent.getItemAtPosition(pos);
+		        ((TextView)findViewById(R.id.annonceJ1Points)).setText(pointAnnonce);
 		    }
 		    public void onNothingSelected(AdapterView<?> parent) {
 		    }
 		});
 
 		spinnerCouleur=(Spinner)annonceDialogView.findViewById(R.id.spinnerAnnonce);
-		ArrayAdapter<String>adapterCouleur = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, couleurs);
+		ArrayAdapter<String> adapterCouleur = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, couleurs);
 		adapterCouleur.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerCouleur.setAdapter(adapterCouleur);
 		spinnerCouleur.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 		    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-		        Object item = parent.getItemAtPosition(pos);
-		        ((TextView)findViewById(R.id.annonceJ1Couleur)).setText((String)item);
+		        couleurAnnonce = (String) parent.getItemAtPosition(pos);
+		        ((TextView)findViewById(R.id.annonceJ1Couleur)).setText((String)couleurAnnonce);
 		    }
 		    public void onNothingSelected(AdapterView<?> parent) {
 		    }
@@ -436,9 +439,6 @@ public class PartieActivity extends Activity {
 
 		//On affiche :
 		adb.show();
-
-
-
 	}
 
 	/**
@@ -450,9 +450,6 @@ public class PartieActivity extends Activity {
 		getActionBar().hide();
 
 	}
-
-
-
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -477,103 +474,24 @@ public class PartieActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	public class MyReceiver extends BroadcastReceiver {
+		
+		public MyReceiver() {
+	        super();
+	        Log.d("Annonce", "Receiver constructed");
+	    }
 
-	private RuntimeCallback<AgentController> agentStartupCallback = new RuntimeCallback<AgentController>() {
 		@Override
-		public void onSuccess(AgentController agent) {
-		}
+		public void onReceive(Context context, Intent intent) {
+			Log.d("Annonce", "receive");
+			String action = intent.getAction();
 
-		@Override
-		public void onFailure(Throwable throwable) {
-			logger.log(Level.INFO, "L'identifiant ou le mot de passe n'est pas valide");
-		}
-	};
-
-	public void startChat(final String identifiant, final String host,
-			final String port,
-			final RuntimeCallback<AgentController> agentStartupCallback) {
-
-		final Properties profile = new Properties();
-		profile.setProperty(Profile.MAIN_HOST, host);
-		profile.setProperty(Profile.MAIN_PORT, port);
-		profile.setProperty(Profile.MAIN, Boolean.FALSE.toString());
-		profile.setProperty(Profile.JVM, Profile.ANDROID);
-
-		if (AndroidHelper.isEmulator()) {
-			// Emulator: this is needed to work with emulated devices
-			profile.setProperty(Profile.LOCAL_HOST, AndroidHelper.LOOPBACK);
-		} else {
-			profile.setProperty(Profile.LOCAL_HOST, AndroidHelper.getLocalIPAddress());
-		}
-		// Emulator: this is not really needed on a real device
-		profile.setProperty(Profile.LOCAL_PORT, "2000");
-
-		if (microRuntimeServiceBinder == null) {
-			serviceConnection = new ServiceConnection() {
-				public void onServiceConnected(ComponentName className,
-						IBinder service) {
-					microRuntimeServiceBinder = (MicroRuntimeServiceBinder) service;
-					logger.log(Level.INFO, "Gateway successfully bound to MicroRuntimeService");
-					startContainer(identifiant, profile, agentStartupCallback);
-				};
-
-				public void onServiceDisconnected(ComponentName className) {
-					microRuntimeServiceBinder = null;
-					logger.log(Level.INFO, "Gateway unbound from MicroRuntimeService");
-				}
-			};
-			logger.log(Level.INFO, "Binding Gateway to MicroRuntimeService...");
-			bindService(new Intent(getApplicationContext(),
-					MicroRuntimeService.class), serviceConnection,
-					Context.BIND_AUTO_CREATE);
-		} else {
-			logger.log(Level.INFO, "MicroRumtimeGateway already binded to service");
-			startContainer(identifiant, profile, agentStartupCallback);
-		}
-	}
-
-	private void startContainer(final String identifiant, Properties profile,
-			final RuntimeCallback<AgentController> agentStartupCallback) {
-		if (!MicroRuntime.isRunning()) {
-			microRuntimeServiceBinder.startAgentContainer(profile,
-					new RuntimeCallback<Void>() {
-				@Override
-				public void onSuccess(Void thisIsNull) {
-					logger.log(Level.INFO, "Successfully start of the container...");
-					startAgent(identifiant, agentStartupCallback);
-				}
-
-				@Override
-				public void onFailure(Throwable throwable) {
-					logger.log(Level.SEVERE, "Failed to start the container...");
-				}
-			});
-		} else {
-			startAgent(identifiant, agentStartupCallback);
-		}
-	}
-
-	private void startAgent(final String identifiant, final RuntimeCallback<AgentController> agentStartupCallback) {
-		microRuntimeServiceBinder.startAgent(identifiant, ConnexionInterface.class.getName(),
-				new Object[] { getApplicationContext()},//TODO: passer les arguments ici
-				new RuntimeCallback<Void>() {
-			@Override
-			public void onSuccess(Void thisIsNull) {
-				logger.log(Level.INFO, "Successfully start of the " + ConnexionInterface.class.getName() + "...");
-				try {
-					agentStartupCallback.onSuccess(MicroRuntime.getAgent(identifiant));
-				} catch (ControllerException e) {
-					// Should never happen
-					agentStartupCallback.onFailure(e);
-				}
+			if (action.equalsIgnoreCase("coinchutc.ANNONCE")) {
+				Log.d("Annonce", "Receive " + action);
+				annoncer();
 			}
-
-			@Override
-			public void onFailure(Throwable throwable) {
-				logger.log(Level.SEVERE, "Failed to start the " + ConnexionInterface.class.getName() + "...");
-				agentStartupCallback.onFailure(throwable);
-			}
-		});
+		}
 	}
 }
 

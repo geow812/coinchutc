@@ -48,13 +48,6 @@ public class RejoindrePartieActivity extends Activity {
 	private ListView list_players;
 	private MyReceiver myReceiver = new MyReceiver();
 	private CustomAdapter adapter;
-
-	public void demoPartie(View view) {
-		Intent intent = new Intent(this, PartieActivity.class);
-		intent.putExtra("identifiant", identifiant);
-		startActivity(intent);
-
-	}
 	
 	@Override
 	public void onBackPressed () {
@@ -80,6 +73,28 @@ public class RejoindrePartieActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		Log.d("RejoindrePartieActivity", "Pause");
+		try{
+			unregisterReceiver(myReceiver);
+		}
+		catch (IllegalArgumentException e){	
+		}
+	}
+	
+	@Override
+	public void onStop() {
+		super.onStop();
+		Log.d("RejoindrePartieActivity", "Stop");
+		try{
+			unregisterReceiver(myReceiver);
+		}
+		catch (IllegalArgumentException e){	
+		}
 	}
 	
 	@Override
@@ -196,15 +211,7 @@ public class RejoindrePartieActivity extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 		unregisterReceiver(myReceiver);
-		
-		if (MicroRuntime.isRunning()) {
-			try {
-				MicroRuntime.killAgent(identifiant);
-			} catch (NotFoundException e) {
-				Log.e("RejoindrePartieActivity", "Agent Not Found!");
-				e.printStackTrace();
-			}
-		}
+		Log.d("RejoindrePartieActivity", "Destroy RejoindrePartieActivity!");
 	}
 
 	public void envoyer(View view) {
